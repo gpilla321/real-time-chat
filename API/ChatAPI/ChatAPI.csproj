@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HotChocolate" Version="13.9.7" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="13.9.7" />
+    <PackageReference Include="MongoDB.Driver" Version="2.27.0" />
+    <PackageReference Include="MongoDB.Driver.Core" Version="2.27.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChatAPI.Domain\ChatAPI.Domain.csproj" />
+    <ProjectReference Include="..\ChatAPI.Infrastructure\ChatAPI.Infrastructure.csproj" />
+    <ProjectReference Include="..\ChatAPI.Services\ChatAPI.Services.csproj" />
+  </ItemGroup>
+
+</Project>
