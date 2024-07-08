@@ -1,5 +1,6 @@
 ﻿
 using ChatAPI.Domain.Model;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace ChatAPI.Infrastructure.Repository
@@ -26,7 +27,6 @@ namespace ChatAPI.Infrastructure.Repository
 
         public User Insert(User newUser)
         {
-            newUser.Id = Guid.NewGuid().ToString();
             _collection.InsertOne(newUser);
 
             return newUser;

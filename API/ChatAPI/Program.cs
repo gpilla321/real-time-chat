@@ -16,8 +16,10 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddTransient<IMessageService, MessageService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IChannelService, ChannelService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IMessageRepository, MessageRepository>();
+builder.Services.AddTransient<IChannelRepository, ChannelRepository>();
 
 var client = new MongoClient("mongodb://localhost:27017");
 builder.Services.AddSingleton<IMongoClient>(client);

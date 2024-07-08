@@ -9,3 +9,4 @@ C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI.Domain\obj\
 C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI.Domain\obj\Debug\net7.0\refint\ChatAPI.Domain.dll
 C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI.Domain\obj\Debug\net7.0\ChatAPI.Domain.pdb
 C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI.Domain\obj\Debug\net7.0\ref\ChatAPI.Domain.dll
+C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI.Domain\obj\Debug\net7.0\ChatAPI.Domain.csproj.AssemblyReference.cache

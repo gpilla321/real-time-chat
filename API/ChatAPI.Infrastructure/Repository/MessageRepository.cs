@@ -1,16 +1,12 @@
 ﻿using ChatAPI.Domain.Model;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChatAPI.Infrastructure.Repository
 {
     public interface IMessageRepository
     {
         Task SendMessage(Message message);
+        Task<List<Message>> GetMessages(string channelId);
     }
 
     public class MessageRepository : IMessageRepository
@@ -22,10 +18,16 @@ namespace ChatAPI.Infrastructure.Repository
             _collection = database.GetCollection<Message>("Message");
         }
 
+        public async Task<List<Message>> GetMessages(string channelId)
+        {
+            var result = await _collection.FindAsync(_ => _.ChannelId == channelId);
+
+            return result.ToList();
+        }
+
         public async Task SendMessage(Message message)
         {
             message.Timestamp = DateTime.Now;
-            message.Id = Guid.NewGuid().ToString();
 
             await _collection.InsertOneAsync(message);
         }

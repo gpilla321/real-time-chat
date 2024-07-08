@@ -1,16 +1,13 @@
-﻿using ChatAPI.Domain.Model.InputType;
+﻿using ChatAPI.Domain.InputType;
+using ChatAPI.Domain.Model;
 using ChatAPI.Infrastructure.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChatAPI.Services.Service
 {
     public interface IMessageService
     {
         Task SendMessage(SendMessageInput input);
+        Task<List<Message>> GetMessages(string channelId);
     }
 
     public class MessageService : IMessageService
@@ -19,6 +16,11 @@ namespace ChatAPI.Services.Service
         public MessageService(IMessageRepository messageRepository)
         {
             _messageRepository = messageRepository;
+        }
+
+        public Task<List<Message>> GetMessages(string channelId)
+        {
+            return _messageRepository.GetMessages(channelId);
         }
 
         public async Task SendMessage(SendMessageInput input)

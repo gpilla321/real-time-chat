@@ -1,5 +1,5 @@
 ﻿using ChatAPI.Domain.Model;
-using ChatAPI.Domain.Model.InputType;
+using ChatAPI.Domain.InputType;
 using ChatAPI.Infrastructure.Repository;
 
 namespace ChatAPI.Services.Service
