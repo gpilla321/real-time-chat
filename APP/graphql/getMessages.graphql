@@ -1,0 +1,10 @@
+query Messages($channelId: String!) {
+  messages(channelId: $channelId) {
+    id
+    from
+    to
+    content
+    channelId
+    timestamp
+  }
+}
