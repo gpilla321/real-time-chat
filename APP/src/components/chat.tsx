@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { COLOR } from "./consts";
 import { StyledH1 } from "./common";
 import Message from "./message";
+import Button from "./button";
 
 const Chat = () => {
   return (
@@ -21,7 +22,12 @@ const Chat = () => {
         <Message side="right" />
         <Message side="right" />
       </StyledWrapperChat>
-      <StyledWrapperTextEditor>test</StyledWrapperTextEditor>
+      <StyledWrapperTextEditor>
+        <StyledAutocomplete placeholder="Type the message" />
+        <StyledButtonArea>
+          <Button text="Send" />
+        </StyledButtonArea>
+      </StyledWrapperTextEditor>
     </StyledWrapper>
   );
 };
@@ -37,7 +43,7 @@ const StyledWrapper = styled.div`
 const StyledWrapperChat = styled.div`
   display: flex;
   flex-direction: column;
-  height: 55vh;
+  height: 65vh;
   overflow: auto;
   padding: 1em;
   background-color: ${COLOR.white};
@@ -49,8 +55,31 @@ const StyledWrapperChat = styled.div`
 `;
 
 const StyledWrapperTextEditor = styled.div`
-  background-color: ${COLOR.white};
+  display: flex;
+  justify-content: space-between;
+`;
+
+const StyledAutocomplete = styled.textarea`
+  border: 0;
+  outline: 0;
+  width: 100%;
+  height: 100%;
   padding: 1em;
-  border: 1px solid ${COLOR.darkGray};
+  box-sizing: border-box;
+  background-color: ${COLOR.white};
   border-radius: 0.5em;
+  -webkit-box-shadow: inset 2px 2px 4px -2px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: inset 2px 2px 4px -2px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 2px 2px 4px -2px rgba(0, 0, 0, 0.25);
+  min-height: 10vh;
+  font-family: "Montserrat", sans-serif;
+  width: 90%;
+`;
+
+const StyledButtonArea = styled.div`
+  width: 10%;
+  background-color: ${COLOR.lightGray};
+  display: flex;
+  align-items: center;
+  justify-content: end;
 `;
