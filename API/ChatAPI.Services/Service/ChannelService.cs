@@ -12,6 +12,8 @@ namespace ChatAPI.Services.Service
     public interface IChannelService
     {
         Task<Channel> Insert(CreateChannelInput input);
+        Task<List<Channel>> List(string userId);
+        Task<Channel> Get(string channelId);
     }
 
     public class ChannelService : IChannelService
@@ -23,16 +25,25 @@ namespace ChatAPI.Services.Service
             _channelRepository = channelRepository;
         }
 
+        public Task<Channel> Get(string channelId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Channel> Insert(CreateChannelInput input)
         {
             var channel = new Channel()
             {
-                From = input.From,
-                To = input.To,
+                UsersId = new List<string>() { input.From, input.To },
                 CreatedAt = DateTime.Now
             };
 
             return _channelRepository.Insert(channel);
+        }
+
+        public Task<List<Channel>> List(string userId)
+        {
+            return _channelRepository.List(userId);
         }
     }
 }

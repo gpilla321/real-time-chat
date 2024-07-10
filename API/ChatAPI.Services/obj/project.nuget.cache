@@ -1,13 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "sReWhf20RURXErCrAL0r9Bh+8YP1XPPJtX1E4+DfflNDe3et4f6z88o6W80EZImOSIdHn+PN7fvthXoW16hEew==",
+  "dgSpecHash": "RBJMc1+5ipTYWteZ7iwE1bxttMpWKt8eu7yrnDUOpRd3fdb+5nMYroGRJg8qyIWhhIlMojeMj6WnvEdZseYTuw==",
   "success": true,
   "projectFilePath": "C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\real-time-chat\\API\\ChatAPI.Services\\ChatAPI.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\gusta\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
+    "C:\\Users\\gusta\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\8.0.0\\microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\2.0.0\\microsoft.extensions.logging.abstractions.2.0.0.nupkg.sha512",
+    "C:\\Users\\gusta\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",

@@ -8,8 +8,7 @@ namespace ChatAPI.Domain.Model
 {
     public class Channel : Base
     {
-        public string From { get; set; }
-        public string To { get; set; }
+        public List<string> UsersId{ get; set; }  
         public DateTime CreatedAt { get; set; }
     }
 }

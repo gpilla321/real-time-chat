@@ -79,3 +79,5 @@ C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI\obj\Debug\n
 C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI\obj\Debug\net7.0\ChatAPI.pdb
 C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI\obj\Debug\net7.0\ChatAPI.genruntimeconfig.cache
 C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI\obj\Debug\net7.0\ref\ChatAPI.dll
+C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI\bin\Debug\net7.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\gusta\OneDrive\Documentos\GitHub\real-time-chat\API\ChatAPI\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll

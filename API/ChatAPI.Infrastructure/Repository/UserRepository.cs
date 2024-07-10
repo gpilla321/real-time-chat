@@ -7,8 +7,10 @@ namespace ChatAPI.Infrastructure.Repository
 {
     public interface IUserRepository
     {
-        User Insert(User input);
-        User Get(string userName);
+        Task<User> Insert(User input);
+        Task<User> Get(string id);
+        Task<User> GetByUserName(string userName);
+        Task<List<User>> List();
     }
 
     public class UserRepository : IUserRepository
@@ -20,16 +22,32 @@ namespace ChatAPI.Infrastructure.Repository
             _collection = database.GetCollection<User>("User");
         }
 
-        public User Get(string userName)
+        public async Task<User> Get(string id)
         {
-            return _collection.Find(_ => _.Username == userName).First();
+            var result = await _collection.FindAsync(_ => _.Id == id);
+
+            return result.FirstOrDefault();
         }
 
-        public User Insert(User newUser)
+        public async Task<User> GetByUserName(string userName)
         {
-            _collection.InsertOne(newUser);
+            var result = await _collection.FindAsync(_ => _.Username == userName);
+
+            return result.FirstOrDefault();
+        }
+
+        public async Task<User> Insert(User newUser)
+        {
+            await _collection.InsertOneAsync(newUser);
 
             return newUser;
+        }
+
+        public async Task<List<User>> List()
+        {
+            var result = await _collection.FindAsync(_ => true);
+
+            return result.ToList();
         }
     }
 }

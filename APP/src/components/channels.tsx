@@ -1,40 +1,66 @@
 import styled from "styled-components";
 import { COLOR } from "./consts";
 import { StyledH3 } from "./common";
+import { useChannelContext } from "../contexts/channelContext";
+import { useUserContext } from "../contexts/userContext";
 
-const Channels = () => {
+interface IProps {}
+
+const Channels = ({}: IProps) => {
+  const { channels, setSelectedChannel } = useChannelContext();
+  const { currentUser, users } = useUserContext();
+
   return (
     <StyledWrapper>
       <StyledH3 style={{ color: COLOR.white, marginBottom: "1em" }}>
         Conversations
       </StyledH3>
       <StyledConversationListWrapper>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
-        <StyledConversation>Jhon Doe</StyledConversation>
+        {channels &&
+          channels.map((c, index) => (
+            <StyledConversation
+              key={index}
+              onClick={() => {
+                setSelectedChannel(c);
+              }}
+            >
+              {c.usersId.map(
+                (_) =>
+                  currentUser?.id !== _ && (
+                    <div key={_}>{users.find((__) => __.id === _)?.name}</div>
+                  )
+              )}
+            </StyledConversation>
+          ))}
+      </StyledConversationListWrapper>
+      <StyledH3 style={{ color: COLOR.white, margin: "1em 0" }}>Users</StyledH3>
+      <StyledConversationListWrapper>
+        {users &&
+          users.map((_, index) => (
+            <StyledConversation key={index}>{_.name}</StyledConversation>
+          ))}
       </StyledConversationListWrapper>
       <StyledAccount>
-        <StyledAccountDetail>Logged as: Gustavo Pilla </StyledAccountDetail>
+        <StyledAccountDetail>
+          Logged as: {currentUser?.name || "No user selected"}
+          <select
+            onChange={(e) => {
+              localStorage.setItem(
+                "user",
+                JSON.stringify(users.find((_) => _.id === e.target.value) ?? {})
+              );
+            }}
+          >
+            <option selected disabled>
+              Select
+            </option>
+            {users.map((_, index) => (
+              <option key={index} value={_.id}>
+                {_.name}
+              </option>
+            ))}
+          </select>
+        </StyledAccountDetail>
       </StyledAccount>
     </StyledWrapper>
   );
@@ -45,14 +71,14 @@ export default Channels;
 const StyledWrapper = styled.div`
   width: 20%;
   background-color: ${COLOR.primary};
-  padding: 2em;
+  padding: 1em;
   position: relative;
 `;
 
 const StyledConversationListWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  max-height: 70vh;
+  max-height: 35vh;
   overflow: auto;
 `;
 
@@ -61,6 +87,7 @@ const StyledConversation = styled.div`
   font-size: 0.875em;
   padding: 0.5em 0.5em;
   cursor: pointer;
+  border-radius: 0.25em;
 
   &:hover {
     background-color: ${COLOR.white};

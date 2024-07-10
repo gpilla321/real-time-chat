@@ -1,0 +1,7 @@
+query ListChannels($userId: String!) {
+  listChannels(userId: $userId) {
+    id
+    createdAt
+    usersId
+  }
+}

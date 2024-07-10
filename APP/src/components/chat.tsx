@@ -3,29 +3,93 @@ import { COLOR } from "./consts";
 import { StyledH1 } from "./common";
 import Message from "./message";
 import Button from "./button";
+import { useMessagesQuery, useSendMessageMutation } from "../../graphql/schema";
+import { useState } from "react";
+import { useUserContext } from "../contexts/userContext";
+import { useChannelContext } from "../contexts/channelContext";
 
 const Chat = () => {
+  const { currentUser, users } = useUserContext();
+  const { selectedChannel, setSelectedChannel } = useChannelContext();
+  const [text, setText] = useState("");
+  const [sendMessage] = useSendMessageMutation();
+
+  const { data, refetch } = useMessagesQuery({
+    skip: !currentUser && !selectedChannel,
+    variables: {
+      channelId: selectedChannel?.id || "",
+    },
+  });
+
+  const handleTextChange = (newValue: string) => {
+    setText(newValue);
+  };
+
+  const handleSendMessage = () => {
+    if (!text) return;
+    const otherUser = selectedChannel?.usersId.find(
+      (_) => _ !== currentUser?.id
+    );
+    sendMessage({
+      variables: {
+        input: {
+          channelId: selectedChannel?.id!,
+          content: text,
+          to: otherUser!,
+          from: currentUser!.id,
+        },
+      },
+    });
+    setText("");
+    setTimeout(() => {
+      refetch();
+    }, 500);
+  };
+  const getChannelName = () => {
+    if (currentUser && selectedChannel) {
+      const user = selectedChannel.usersId.find((_) => _ !== currentUser.id);
+
+      return user ? users.find((_) => _.id === user)?.name : "";
+    }
+  };
+
+  if (!selectedChannel)
+    return <StyledWrapper empty>Start a Conversation</StyledWrapper>;
+
   return (
     <StyledWrapper>
-      <StyledH1
-        style={{
-          paddingBottom: "0.5em",
-        }}
-      >
-        Gustavo Pilla
-      </StyledH1>
+      <StyledHeader>
+        <StyledH1
+          style={{
+            paddingBottom: "0.5em",
+          }}
+        >
+          {getChannelName()}
+        </StyledH1>
+        <StyledActionArea onClick={() => setSelectedChannel(null)}>
+          X
+        </StyledActionArea>
+      </StyledHeader>
       <StyledWrapperChat>
-        <Message side="left" />
-        <Message side="right" />
-        <Message side="left" />
-        <Message side="right" />
-        <Message side="right" />
-        <Message side="right" />
+        {data &&
+          data.messages?.map((_) => (
+            <Message
+              key={_.id}
+              side={_.from.id === currentUser?.id ? "right" : "left"}
+              content={_.content}
+              sender={_.from.name}
+              sentAt={_.timestamp}
+            />
+          ))}
       </StyledWrapperChat>
       <StyledWrapperTextEditor>
-        <StyledAutocomplete placeholder="Type the message" />
+        <StyledAutocomplete
+          value={text}
+          placeholder="Type the message"
+          onChange={(e) => handleTextChange(e.target.value)}
+        />
         <StyledButtonArea>
-          <Button text="Send" />
+          <Button text="Send" onClick={handleSendMessage} />
         </StyledButtonArea>
       </StyledWrapperTextEditor>
     </StyledWrapper>
@@ -34,10 +98,27 @@ const Chat = () => {
 
 export default Chat;
 
-const StyledWrapper = styled.div`
+const StyledHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const StyledActionArea = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+  cursor: pointer;
+`;
+
+const StyledWrapper = styled.div<{ empty?: boolean }>`
   width: 80%;
-  padding: 2em;
+  padding: 1em;
   background-color: ${COLOR.lightGray} !important;
+  height: 100vh;
+
+  ${(props) =>
+    props.empty &&
+    `display: flex; justify-content: center; align-items: center;`};
 `;
 
 const StyledWrapperChat = styled.div`

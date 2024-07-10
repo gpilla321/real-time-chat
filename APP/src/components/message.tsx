@@ -1,21 +1,22 @@
 import styled from "styled-components";
 import { COLOR } from "./consts";
+import moment from "moment";
 
 interface IProps {
   side: "left" | "right";
+  sender: string;
+  content: string;
+  sentAt: Date;
 }
 
-const Message = ({ side }: IProps) => {
+const Message = ({ side, sender, content, sentAt }: IProps) => {
   return (
     <StyledWrapper side={side}>
       <StyledMessage>
-        <StyledMessageTitle>Gustavo Pilla</StyledMessageTitle>
-        <StyledMessageContent>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
-        </StyledMessageContent>
+        <StyledMessageTitle>
+          {sender} <StyledDate> {moment(sentAt).calendar()}</StyledDate>
+        </StyledMessageTitle>
+        <StyledMessageContent>{content}</StyledMessageContent>
       </StyledMessage>
     </StyledWrapper>
   );
@@ -23,6 +24,11 @@ const Message = ({ side }: IProps) => {
 
 export default Message;
 
+const StyledDate = styled.span`
+  font-weight: 400;
+  font-size: 0.875em;
+  margin-left: 1em;
+`;
 const StyledWrapper = styled.div<{ side: "left" | "right" }>`
   display: flex;
   width: 100%;
@@ -33,7 +39,7 @@ const StyledWrapper = styled.div<{ side: "left" | "right" }>`
 
 const StyledMessage = styled.div`
   padding: 0.5em 1em;
-  border-radius: 0.5em;
+  border-radius: 0.25em;
   border: 1px solid ${COLOR.lightGray2};
   background-color: ${COLOR.lightGray};
   max-width: 45%;
@@ -46,6 +52,8 @@ const StyledMessage = styled.div`
 const StyledMessageTitle = styled.span`
   font-size: 0.875em;
   font-weight: 600;
+  display: flex;
+  align-items: center;
 `;
 
 const StyledMessageContent = styled.p`

@@ -3,10 +3,11 @@ import { COLOR } from "./consts";
 
 interface IProps {
   text: string;
+  onClick: () => void;
 }
 
-const Button = ({ text }: IProps) => {
-  return <StyledButton>{text}</StyledButton>;
+const Button = ({ text, ...props }: IProps) => {
+  return <StyledButton {...props}>{text}</StyledButton>;
 };
 
 export default Button;

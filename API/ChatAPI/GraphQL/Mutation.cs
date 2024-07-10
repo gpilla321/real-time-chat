@@ -17,9 +17,9 @@ namespace ChatAPI.GraphQL
             _channelService = channelService;
         }
 
-        public User CreateUser(CreateUserInput newUser)
+        public async Task<User> CreateUser(CreateUserInput newUser)
         {
-            return _userService.Insert(newUser);
+            return await _userService.Insert(newUser);
         }
         
         public async Task<bool> SendMessage(SendMessageInput input)

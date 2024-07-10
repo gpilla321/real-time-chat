@@ -1,5 +1,7 @@
-﻿using ChatAPI.Domain.Model;
+﻿using ChatAPI.Domain.DTO;
+using ChatAPI.Domain.Model;
 using ChatAPI.Services.Service;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ChatAPI.GraphQL
 {
@@ -8,6 +10,8 @@ namespace ChatAPI.GraphQL
         private readonly IUserService _userService;
         private readonly IMessageService _messageService;
         private readonly IChannelService _channelService;
+
+
         public Query(IUserService userService, IChannelService channelService, IMessageService messageService)
         {
             _userService = userService;
@@ -15,14 +19,26 @@ namespace ChatAPI.GraphQL
             _messageService = messageService;
         }
 
-        public User GetUser(string username)
+        public async Task<User> GetUser(string username)
         {
-            return _userService.Get(username);
+            return await _userService.Get(username);
         }
 
-        public async Task<List<Message>> GetMessages(string channelId)
+        public async Task<List<User>> ListUsers()
         {
-            return await _messageService.GetMessages(channelId);
+            return await _userService.List();
+        }
+
+        public async Task<List<UserMessageDTO>> GetMessages(string channelId)
+        {
+            var messages = await _messageService.GetMessages(channelId);
+
+            return messages;
+        }
+
+        public async Task<List<Channel>> ListChannels(string userId)
+        {
+            return await _channelService.List(userId);
         }
     }
 }
