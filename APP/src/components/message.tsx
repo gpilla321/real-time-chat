@@ -7,14 +7,19 @@ interface IProps {
   sender: string;
   content: string;
   sentAt: Date;
+  confirming: boolean;
 }
 
-const Message = ({ side, sender, content, sentAt }: IProps) => {
+const Message = ({ side, sender, content, sentAt, confirming }: IProps) => {
   return (
     <StyledWrapper side={side}>
       <StyledMessage>
         <StyledMessageTitle>
-          {sender} <StyledDate> {moment(sentAt).calendar()}</StyledDate>
+          {sender}{" "}
+          <StyledDate>
+            {" "}
+            {moment(sentAt).calendar()} {confirming && <>(sending)</>}
+          </StyledDate>
         </StyledMessageTitle>
         <StyledMessageContent>{content}</StyledMessageContent>
       </StyledMessage>
@@ -22,7 +27,7 @@ const Message = ({ side, sender, content, sentAt }: IProps) => {
   );
 };
 
-export default Message;
+export { Message };
 
 const StyledDate = styled.span`
   font-weight: 400;

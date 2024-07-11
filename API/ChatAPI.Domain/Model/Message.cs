@@ -13,5 +13,7 @@ namespace ChatAPI.Domain.Model
         public string Content { get; set; }
         public string ChannelId { get; set; }
         public DateTime Timestamp { get; set; }
+        public string ClientUID { get; set; }
+        public List<string> ViewedBy { get; set; }
     }
 }

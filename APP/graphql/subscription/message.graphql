@@ -1,0 +1,9 @@
+subscription MessageSent {
+  messageSent {
+    id
+    from 
+    to 
+    content
+    timestamp
+  }
+}

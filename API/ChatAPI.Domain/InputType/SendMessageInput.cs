@@ -12,5 +12,6 @@ namespace ChatAPI.Domain.InputType
         public string From { get; set; }
         public string To { get; set; }
         public string Content { get; set; }
+        public string ClientUID { get; set; }
     }
 }

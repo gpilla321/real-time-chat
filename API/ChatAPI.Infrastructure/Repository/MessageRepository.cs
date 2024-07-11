@@ -7,6 +7,7 @@ namespace ChatAPI.Infrastructure.Repository
     {
         Task SendMessage(Message message);
         Task<List<Message>> GetMessages(string channelId);
+        Task<List<Message>> UnviewedMessagesByChannel(List<string> channelsId, string userId);
     }
 
     public class MessageRepository : IMessageRepository
@@ -30,6 +31,14 @@ namespace ChatAPI.Infrastructure.Repository
             message.Timestamp = DateTime.Now;
 
             await _collection.InsertOneAsync(message);
+        }
+
+        public async Task<List<Message>> UnviewedMessagesByChannel(List<string> channelsId, string userId)
+        {
+            var result =
+                await _collection.FindAsync(_ => channelsId.Contains(_.ChannelId) && !_.ViewedBy.Contains(userId));
+
+            return result.ToList();
         }
     }
 }

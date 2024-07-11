@@ -35,6 +35,18 @@ export type CreateUserInput = {
   username: Scalars['String']['input'];
 };
 
+export type Message = {
+  __typename?: 'Message';
+  channelId: Scalars['String']['output'];
+  clientUID: Scalars['String']['output'];
+  content: Scalars['String']['output'];
+  from: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  timestamp: Scalars['DateTime']['output'];
+  to: Scalars['String']['output'];
+  viewedBy: Array<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createChannel: Channel;
@@ -59,10 +71,16 @@ export type MutationSendMessageArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  channelViewedBy: Array<ViewByByChannelDto>;
   listChannels: Array<Channel>;
   listUsers: Array<User>;
   messages: Array<UserMessageDto>;
   user: User;
+};
+
+
+export type QueryChannelViewedByArgs = {
+  userId: Scalars['String']['input'];
 };
 
 
@@ -82,9 +100,15 @@ export type QueryUserArgs = {
 
 export type SendMessageInput = {
   channelId: Scalars['String']['input'];
+  clientUID: Scalars['String']['input'];
   content: Scalars['String']['input'];
   from: Scalars['String']['input'];
   to: Scalars['String']['input'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  messageSent: Message;
 };
 
 export type User = {
@@ -101,6 +125,12 @@ export type UserMessageDto = {
   id: Scalars['String']['output'];
   timestamp: Scalars['DateTime']['output'];
   to: User;
+};
+
+export type ViewByByChannelDto = {
+  __typename?: 'ViewByByChannelDTO';
+  channelId: Scalars['String']['output'];
+  count: Scalars['Int']['output'];
 };
 
 export type SendMessageMutationVariables = Exact<{
@@ -128,6 +158,18 @@ export type ListUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ListUsersQuery = { __typename?: 'Query', listUsers: Array<{ __typename?: 'User', id: string, username: string, name: string }> };
+
+export type UnviewedMessagesQueryVariables = Exact<{
+  userId: Scalars['String']['input'];
+}>;
+
+
+export type UnviewedMessagesQuery = { __typename?: 'Query', channelViewedBy: Array<{ __typename?: 'ViewByByChannelDTO', channelId: string, count: number }> };
+
+export type MessageSentSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MessageSentSubscription = { __typename?: 'Subscription', messageSent: { __typename?: 'Message', id: string, from: string, to: string, content: string, timestamp: any } };
 
 
 export const SendMessageDocument = gql`
@@ -296,3 +338,77 @@ export type ListUsersQueryHookResult = ReturnType<typeof useListUsersQuery>;
 export type ListUsersLazyQueryHookResult = ReturnType<typeof useListUsersLazyQuery>;
 export type ListUsersSuspenseQueryHookResult = ReturnType<typeof useListUsersSuspenseQuery>;
 export type ListUsersQueryResult = Apollo.QueryResult<ListUsersQuery, ListUsersQueryVariables>;
+export const UnviewedMessagesDocument = gql`
+    query unviewedMessages($userId: String!) {
+  channelViewedBy(userId: $userId) {
+    channelId
+    count
+  }
+}
+    `;
+
+/**
+ * __useUnviewedMessagesQuery__
+ *
+ * To run a query within a React component, call `useUnviewedMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUnviewedMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUnviewedMessagesQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUnviewedMessagesQuery(baseOptions: Apollo.QueryHookOptions<UnviewedMessagesQuery, UnviewedMessagesQueryVariables> & ({ variables: UnviewedMessagesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UnviewedMessagesQuery, UnviewedMessagesQueryVariables>(UnviewedMessagesDocument, options);
+      }
+export function useUnviewedMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UnviewedMessagesQuery, UnviewedMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UnviewedMessagesQuery, UnviewedMessagesQueryVariables>(UnviewedMessagesDocument, options);
+        }
+export function useUnviewedMessagesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UnviewedMessagesQuery, UnviewedMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UnviewedMessagesQuery, UnviewedMessagesQueryVariables>(UnviewedMessagesDocument, options);
+        }
+export type UnviewedMessagesQueryHookResult = ReturnType<typeof useUnviewedMessagesQuery>;
+export type UnviewedMessagesLazyQueryHookResult = ReturnType<typeof useUnviewedMessagesLazyQuery>;
+export type UnviewedMessagesSuspenseQueryHookResult = ReturnType<typeof useUnviewedMessagesSuspenseQuery>;
+export type UnviewedMessagesQueryResult = Apollo.QueryResult<UnviewedMessagesQuery, UnviewedMessagesQueryVariables>;
+export const MessageSentDocument = gql`
+    subscription MessageSent {
+  messageSent {
+    id
+    from
+    to
+    content
+    timestamp
+  }
+}
+    `;
+
+/**
+ * __useMessageSentSubscription__
+ *
+ * To run a query within a React component, call `useMessageSentSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMessageSentSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMessageSentSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMessageSentSubscription(baseOptions?: Apollo.SubscriptionHookOptions<MessageSentSubscription, MessageSentSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<MessageSentSubscription, MessageSentSubscriptionVariables>(MessageSentDocument, options);
+      }
+export type MessageSentSubscriptionHookResult = ReturnType<typeof useMessageSentSubscription>;
+export type MessageSentSubscriptionResult = Apollo.SubscriptionResult<MessageSentSubscription>;

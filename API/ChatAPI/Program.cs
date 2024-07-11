@@ -33,7 +33,9 @@ builder.Services.AddMemoryCache();
 builder.Services
     .AddGraphQLServer()
     .AddMutationType<Mutation>()
-    .AddQueryType<Query>();
+    .AddQueryType<Query>()
+    .AddSubscriptionType<Subscription>()
+    .AddInMemorySubscriptions();
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -55,6 +57,8 @@ if (app.Environment.IsDevelopment())
 {
 
 }
+
+app.UseWebSockets();
 
 app.UseCors(MyAllowSpecificOrigins);
 

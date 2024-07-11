@@ -1336,6 +1336,7 @@
         "dependencies": {
           "ChatAPI.Domain": "1.0.0",
           "ChatAPI.Infrastructure": "1.0.0",
+          "HotChocolate.Subscriptions": "13.9.7",
           "Microsoft.Extensions.Caching.Abstractions": "8.0.0",
           "System.Linq": "4.3.0"
         },

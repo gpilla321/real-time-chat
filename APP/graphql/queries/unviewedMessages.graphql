@@ -1,0 +1,6 @@
+query unviewedMessages($userId: String!) {
+  channelViewedBy(userId: $userId) {
+    channelId
+    count
+  }
+}

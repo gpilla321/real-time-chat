@@ -40,5 +40,10 @@ namespace ChatAPI.GraphQL
         {
             return await _channelService.List(userId);
         }
+
+        public async Task<List<ViewByByChannelDTO>> ChannelViewedBy(string userId)
+        {
+            return await _channelService.UnviewedMessagesByChannel(userId);
+        }
     }
 }

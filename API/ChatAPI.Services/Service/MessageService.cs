@@ -2,6 +2,7 @@
 using ChatAPI.Domain.InputType;
 using ChatAPI.Domain.Model;
 using ChatAPI.Infrastructure.Repository;
+using HotChocolate.Subscriptions;
 
 namespace ChatAPI.Services.Service
 {
@@ -16,11 +17,13 @@ namespace ChatAPI.Services.Service
         private IMessageRepository _messageRepository;
         private readonly IUserService _userService;
         private readonly IChannelService _channelService;
-        public MessageService(IMessageRepository messageRepository, IUserService userService, IChannelService channelService)
+        private readonly ITopicEventSender _topicSender;
+        public MessageService(IMessageRepository messageRepository, IUserService userService, IChannelService channelService, ITopicEventSender topicSender)
         {
             _messageRepository = messageRepository;
             _userService = userService;
             _channelService = channelService;
+            _topicSender = topicSender;
         }
 
         public async Task<List<UserMessageDTO>> GetMessages(string channelId)
@@ -59,13 +62,18 @@ namespace ChatAPI.Services.Service
                 input.ChannelId = channel.Id;
             }
 
-            await _messageRepository.SendMessage(new Domain.Model.Message()
+            var message = new Message()
             {
                 ChannelId = input.ChannelId,
                 Content = input.Content,
                 From = input.From,
-                To = input.To
-            });
+                To = input.To,
+                ClientUID = input.ClientUID,
+                ViewedBy = new List<string>()
+            };
+
+            await _messageRepository.SendMessage(message);
+            await _topicSender.SendAsync("MessageSent", message);
         }
     }
 }

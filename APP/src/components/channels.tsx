@@ -7,8 +7,10 @@ import { useUserContext } from "../contexts/userContext";
 interface IProps {}
 
 const Channels = ({}: IProps) => {
-  const { channels, setSelectedChannel } = useChannelContext();
+  const { channels, setSelectedChannel, unviwedMessages } = useChannelContext();
   const { currentUser, users } = useUserContext();
+
+  console.log(unviwedMessages);
 
   return (
     <StyledWrapper>
@@ -27,7 +29,14 @@ const Channels = ({}: IProps) => {
               {c.usersId.map(
                 (_) =>
                   currentUser?.id !== _ && (
-                    <div key={_}>{users.find((__) => __.id === _)?.name}</div>
+                    <div key={_}>
+                      {users.find((__) => __.id === _)?.name} (
+                      {
+                        unviwedMessages?.find((um) => um.channelId === c.id)
+                          ?.count
+                      }
+                      )
+                    </div>
                   )
               )}
             </StyledConversation>

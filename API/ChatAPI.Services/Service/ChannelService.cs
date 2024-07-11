@@ -1,4 +1,5 @@
-﻿using ChatAPI.Domain.InputType;
+﻿using ChatAPI.Domain.DTO;
+using ChatAPI.Domain.InputType;
 using ChatAPI.Domain.Model;
 using ChatAPI.Infrastructure.Repository;
 using System;
@@ -14,15 +15,31 @@ namespace ChatAPI.Services.Service
         Task<Channel> Insert(CreateChannelInput input);
         Task<List<Channel>> List(string userId);
         Task<Channel> Get(string channelId);
+        Task<List<ViewByByChannelDTO>> UnviewedMessagesByChannel(string userId);
     }
 
     public class ChannelService : IChannelService
     {
         private readonly IChannelRepository _channelRepository;
+        private readonly IMessageRepository _messageRepository;
 
-        public ChannelService(IChannelRepository channelRepository)
+        public ChannelService(IChannelRepository channelRepository, IMessageRepository messageRepository)
         {
             _channelRepository = channelRepository;
+            _messageRepository = messageRepository;
+        }
+
+        public async Task<List<ViewByByChannelDTO>> UnviewedMessagesByChannel(string userId)
+        {
+            var channels = await List(userId);
+            if (channels == null) return null;
+
+            var messages = await _messageRepository.UnviewedMessagesByChannel(channels.Select(_ => _.Id).ToList(), userId);
+            return messages.GroupBy(_ => _.ChannelId).Select(_ => new ViewByByChannelDTO()
+            {
+                ChannelId = _.Key,
+                Count = _.Count()
+            }).ToList();
         }
 
         public Task<Channel> Get(string channelId)

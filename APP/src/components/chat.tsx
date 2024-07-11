@@ -1,23 +1,41 @@
 import styled from "styled-components";
 import { COLOR } from "./consts";
 import { StyledH1 } from "./common";
-import Message from "./message";
 import Button from "./button";
-import { useMessagesQuery, useSendMessageMutation } from "../../graphql/schema";
-import { useState } from "react";
+import {
+  useMessageSentSubscription,
+  useMessagesQuery,
+  useSendMessageMutation,
+} from "../../graphql/schema";
+import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/userContext";
 import { useChannelContext } from "../contexts/channelContext";
+import { v4 } from "uuid";
+import { Message as ChatMessage } from "./message";
 
 const Chat = () => {
+  const [sendMessage] = useSendMessageMutation();
   const { currentUser, users } = useUserContext();
   const { selectedChannel, setSelectedChannel } = useChannelContext();
   const [text, setText] = useState("");
-  const [sendMessage] = useSendMessageMutation();
 
   const { data, refetch } = useMessagesQuery({
     skip: !currentUser && !selectedChannel,
     variables: {
       channelId: selectedChannel?.id || "",
+    },
+  });
+
+  useEffect(() => {
+    var chat = document.getElementById("chat-wrapper");
+
+    if (chat) chat.scrollTo(0, chat.scrollHeight);
+  }, [data]);
+
+  useMessageSentSubscription({
+    onData: (result) => {
+      if (!result || !result.data) return;
+      refetch();
     },
   });
 
@@ -30,21 +48,23 @@ const Chat = () => {
     const otherUser = selectedChannel?.usersId.find(
       (_) => _ !== currentUser?.id
     );
+    const message = {
+      channelId: selectedChannel?.id!,
+      content: text,
+      to: otherUser!,
+      from: currentUser!.id,
+      clientUID: v4(),
+    };
+
     sendMessage({
       variables: {
-        input: {
-          channelId: selectedChannel?.id!,
-          content: text,
-          to: otherUser!,
-          from: currentUser!.id,
-        },
+        input: message,
       },
     });
+
     setText("");
-    setTimeout(() => {
-      refetch();
-    }, 500);
   };
+
   const getChannelName = () => {
     if (currentUser && selectedChannel) {
       const user = selectedChannel.usersId.find((_) => _ !== currentUser.id);
@@ -70,15 +90,16 @@ const Chat = () => {
           X
         </StyledActionArea>
       </StyledHeader>
-      <StyledWrapperChat>
+      <StyledWrapperChat id="chat-wrapper">
         {data &&
           data.messages?.map((_) => (
-            <Message
-              key={_.id}
+            <ChatMessage
+              key={_.timestamp}
               side={_.from.id === currentUser?.id ? "right" : "left"}
               content={_.content}
               sender={_.from.name}
               sentAt={_.timestamp}
+              confirming={_.id === "sending"}
             />
           ))}
       </StyledWrapperChat>
@@ -122,6 +143,7 @@ const StyledWrapper = styled.div<{ empty?: boolean }>`
 `;
 
 const StyledWrapperChat = styled.div`
+  transition: 0.2s;
   display: flex;
   flex-direction: column;
   height: 65vh;
