@@ -2,6 +2,7 @@
 using ChatAPI.Domain.InputType;
 using ChatAPI.Infrastructure.Repository;
 using Microsoft.Extensions.Caching.Memory;
+using ChatAPI.Services.Helper;
 
 namespace ChatAPI.Services.Service
 {
@@ -40,11 +41,15 @@ namespace ChatAPI.Services.Service
 
             if (userExists != null)
                 throw new Exception("User already exists");
-            
+
+            var hash = Hasher.Hash(newUser.Password);
+
             var user = new User()
             {
                 Username = newUser.Username,
-                Name = newUser.Name
+                Name = newUser.Name,
+                Password = hash.Item2,
+                Salt = hash.Item1
             };
 
             return await _userRepository.Insert(user);

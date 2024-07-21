@@ -1,9 +1,13 @@
 using ChatAPI.GraphQL;
 using ChatAPI.Infrastructure.Repository;
 using ChatAPI.Services.Service;
+using dotenv.net;
+using dotenv.net.Utilities;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +24,7 @@ builder.Services.AddTransient<IChannelService, ChannelService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IMessageRepository, MessageRepository>();
 builder.Services.AddTransient<IChannelRepository, ChannelRepository>();
+builder.Services.AddTransient<ILoginService, LoginService>();
 
 
 var client = new MongoClient("mongodb://localhost:27017");
@@ -32,6 +37,7 @@ builder.Services.AddMemoryCache();
 
 builder.Services
     .AddGraphQLServer()
+    .AddAuthorization()
     .AddMutationType<Mutation>()
     .AddQueryType<Query>()
     .AddSubscriptionType<Subscription>()
@@ -49,6 +55,19 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod();
                       });
 });
+
+builder.Services.AddAuthentication().AddJwtBearer(_ =>
+{
+    _.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidIssuer = "localhost",
+        ValidAudience = "localhost",
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(EnvReader.GetStringValue("JWT_SECRET"))),
+    };
+});
+
+DotEnv.Load();
 
 var app = builder.Build();
 

@@ -38,6 +38,7 @@ namespace ChatAPI.Infrastructure.Repository
 
         public async Task<User> Insert(User newUser)
         {
+            newUser.CreatedAt = DateTime.Now;
             await _collection.InsertOneAsync(newUser);
 
             return newUser;

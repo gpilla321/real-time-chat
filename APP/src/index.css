@@ -3,6 +3,7 @@ body {
     font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
+    background-color: #f3f3f3;
 }
 
 ::-webkit-scrollbar {

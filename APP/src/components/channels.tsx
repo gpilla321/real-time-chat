@@ -3,6 +3,8 @@ import { COLOR } from "./consts";
 import { StyledH3 } from "./common";
 import { useChannelContext } from "../contexts/channelContext";
 import { useUserContext } from "../contexts/userContext";
+import DefaultLink from "./link";
+import Button from "./button";
 
 interface IProps {}
 
@@ -52,23 +54,7 @@ const Channels = ({}: IProps) => {
       <StyledAccount>
         <StyledAccountDetail>
           Logged as: {currentUser?.name || "No user selected"}
-          <select
-            onChange={(e) => {
-              localStorage.setItem(
-                "user",
-                JSON.stringify(users.find((_) => _.id === e.target.value) ?? {})
-              );
-            }}
-          >
-            <option selected disabled>
-              Select
-            </option>
-            {users.map((_, index) => (
-              <option key={index} value={_.id}>
-                {_.name}
-              </option>
-            ))}
-          </select>
+          <Button text="Logout" color="white" />
         </StyledAccountDetail>
       </StyledAccount>
     </StyledWrapper>
@@ -109,13 +95,13 @@ const StyledAccount = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 40px;
+  height: 60px;
   border-top: 1px solid ${COLOR.white};
 `;
 
 const StyledAccountDetail = styled.div`
   padding: 0 2em;
-  height: 40px;
+  height: 60px;
   display: flex;
   align-items: center;
   font-size: 0.875em;

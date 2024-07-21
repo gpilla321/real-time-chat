@@ -1,6 +1,10 @@
-﻿using ChatAPI.Domain.InputType;
+﻿using ChatAPI.Domain;
+using ChatAPI.Domain.DTO;
+using ChatAPI.Domain.InputType;
 using ChatAPI.Domain.Model;
 using ChatAPI.Services.Service;
+using HotChocolate.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ChatAPI.GraphQL
 {
@@ -9,19 +13,27 @@ namespace ChatAPI.GraphQL
         private readonly IMessageService _messageService;
         private readonly IUserService _userService;
         private readonly IChannelService _channelService;
+        private readonly ILoginService _userLogin;
 
-        public Mutation(IUserService userService, IMessageService messageService, IChannelService channelService)
+        public Mutation(IUserService userService, IMessageService messageService, IChannelService channelService, ILoginService userLogin)
         {
             _userService = userService;
             _messageService = messageService;
             _channelService = channelService;
+            _userLogin = userLogin;
         }
 
-        public async Task<User> CreateUser(CreateUserInput newUser)
+        public async Task<OperationResultDTO<bool>> CreateUser(CreateUserInput input)
         {
-            return await _userService.Insert(newUser);
+            var user = await _userService.Insert(input);
+
+            return new OperationResultDTO<bool>()
+            {
+                Success = user != null
+            };
         }
-        
+
+        [Authorize]
         public async Task<bool> SendMessage(SendMessageInput input)
         {
             await _messageService.SendMessage(input);
@@ -29,9 +41,21 @@ namespace ChatAPI.GraphQL
             return true;
         }
 
+        [Authorize]
         public async Task<Channel> CreateChannel(CreateChannelInput input)
         {
             return await _channelService.Insert(input);
+        }
+
+        public async Task<OperationResultDTO<LoggedInDTO>> Login(LoginDTO input)
+        {
+            var loggedIn = await _userLogin.Login(input);
+
+            return new OperationResultDTO<LoggedInDTO>()
+            {
+                Success = loggedIn != null,
+                Data = loggedIn
+            };
         }
     }
 }
