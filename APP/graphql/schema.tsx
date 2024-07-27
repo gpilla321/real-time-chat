@@ -75,6 +75,7 @@ export type Mutation = {
   createUser: OperationResultDtoOfBoolean;
   login: OperationResultDtoOfLoggedInDto;
   sendMessage: Scalars['Boolean']['output'];
+  setMessageViewed: Scalars['Boolean']['output'];
 };
 
 
@@ -95,6 +96,12 @@ export type MutationLoginArgs = {
 
 export type MutationSendMessageArgs = {
   input: SendMessageInput;
+};
+
+
+export type MutationSetMessageViewedArgs = {
+  messageIds: Array<Scalars['String']['input']>;
+  userId: Scalars['String']['input'];
 };
 
 export type OperationResultDtoOfBoolean = {
@@ -146,6 +153,11 @@ export type QueryListChannelsArgs = {
 };
 
 
+export type QueryListUsersArgs = {
+  currentUserId: Scalars['String']['input'];
+};
+
+
 export type QueryMessagesArgs = {
   channelId: Scalars['String']['input'];
 };
@@ -190,6 +202,7 @@ export type UserMessageDto = {
   id: Scalars['String']['output'];
   timestamp: Scalars['DateTime']['output'];
   to: User;
+  viewedBy: Array<Scalars['String']['output']>;
 };
 
 export type ViewByByChannelDto = {
@@ -226,12 +239,20 @@ export type SendMessageMutationVariables = Exact<{
 
 export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: boolean };
 
+export type SetMessageViewedMutationVariables = Exact<{
+  messageIds: Array<Scalars['String']['input']> | Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+}>;
+
+
+export type SetMessageViewedMutation = { __typename?: 'Mutation', setMessageViewed: boolean };
+
 export type MessagesQueryVariables = Exact<{
   channelId: Scalars['String']['input'];
 }>;
 
 
-export type MessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'UserMessageDTO', id: string, content: string, timestamp: any, from: { __typename?: 'User', id: string, name: string, username: string }, to: { __typename?: 'User', id: string, name: string, username: string } }> };
+export type MessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'UserMessageDTO', id: string, content: string, timestamp: any, viewedBy: Array<string>, from: { __typename?: 'User', id: string, name: string, username: string }, to: { __typename?: 'User', id: string, name: string, username: string } }> };
 
 export type ListChannelsQueryVariables = Exact<{
   userId: Scalars['String']['input'];
@@ -240,7 +261,9 @@ export type ListChannelsQueryVariables = Exact<{
 
 export type ListChannelsQuery = { __typename?: 'Query', listChannels: Array<{ __typename?: 'Channel', id: string, createdAt: any, usersId: Array<string> }> };
 
-export type ListUsersQueryVariables = Exact<{ [key: string]: never; }>;
+export type ListUsersQueryVariables = Exact<{
+  currentUserId: Scalars['String']['input'];
+}>;
 
 
 export type ListUsersQuery = { __typename?: 'Query', listUsers: Array<{ __typename?: 'User', id: string, username: string, name: string }> };
@@ -398,6 +421,38 @@ export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<
 export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
 export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
 export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
+export const SetMessageViewedDocument = gql`
+    mutation SetMessageViewed($messageIds: [String!]!, $userId: String!) {
+  setMessageViewed(messageIds: $messageIds, userId: $userId)
+}
+    `;
+export type SetMessageViewedMutationFn = Apollo.MutationFunction<SetMessageViewedMutation, SetMessageViewedMutationVariables>;
+
+/**
+ * __useSetMessageViewedMutation__
+ *
+ * To run a mutation, you first call `useSetMessageViewedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetMessageViewedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setMessageViewedMutation, { data, loading, error }] = useSetMessageViewedMutation({
+ *   variables: {
+ *      messageIds: // value for 'messageIds'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useSetMessageViewedMutation(baseOptions?: Apollo.MutationHookOptions<SetMessageViewedMutation, SetMessageViewedMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetMessageViewedMutation, SetMessageViewedMutationVariables>(SetMessageViewedDocument, options);
+      }
+export type SetMessageViewedMutationHookResult = ReturnType<typeof useSetMessageViewedMutation>;
+export type SetMessageViewedMutationResult = Apollo.MutationResult<SetMessageViewedMutation>;
+export type SetMessageViewedMutationOptions = Apollo.BaseMutationOptions<SetMessageViewedMutation, SetMessageViewedMutationVariables>;
 export const MessagesDocument = gql`
     query Messages($channelId: String!) {
   messages(channelId: $channelId) {
@@ -414,6 +469,7 @@ export const MessagesDocument = gql`
     }
     content
     timestamp
+    viewedBy
   }
 }
     `;
@@ -493,8 +549,8 @@ export type ListChannelsLazyQueryHookResult = ReturnType<typeof useListChannelsL
 export type ListChannelsSuspenseQueryHookResult = ReturnType<typeof useListChannelsSuspenseQuery>;
 export type ListChannelsQueryResult = Apollo.QueryResult<ListChannelsQuery, ListChannelsQueryVariables>;
 export const ListUsersDocument = gql`
-    query ListUsers {
-  listUsers {
+    query ListUsers($currentUserId: String!) {
+  listUsers(currentUserId: $currentUserId) {
     id
     username
     name
@@ -514,10 +570,11 @@ export const ListUsersDocument = gql`
  * @example
  * const { data, loading, error } = useListUsersQuery({
  *   variables: {
+ *      currentUserId: // value for 'currentUserId'
  *   },
  * });
  */
-export function useListUsersQuery(baseOptions?: Apollo.QueryHookOptions<ListUsersQuery, ListUsersQueryVariables>) {
+export function useListUsersQuery(baseOptions: Apollo.QueryHookOptions<ListUsersQuery, ListUsersQueryVariables> & ({ variables: ListUsersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ListUsersQuery, ListUsersQueryVariables>(ListUsersDocument, options);
       }

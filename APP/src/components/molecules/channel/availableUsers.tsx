@@ -12,8 +12,6 @@ const AvailableUsers = ({ users }: IProps) => {
   const { currentUser } = useUserContext();
   const [createChannel] = useCreateChannelMutation();
 
-  // console.log(data);
-
   const onClick = (toUserId: string) => {
     createChannel({
       variables: {
@@ -45,8 +43,6 @@ export default AvailableUsers;
 const StyledConversationListWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  max-height: 35vh;
-  overflow: auto;
 `;
 
 const StyledConversation = styled.div`

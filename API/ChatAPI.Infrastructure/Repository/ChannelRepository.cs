@@ -12,6 +12,7 @@ namespace ChatAPI.Infrastructure.Repository
         Task<Channel> Insert(Channel channel);
         Task<List<Channel>> List(string userId);
         Task<Channel> Get(string channelId);
+        Task<Channel> Exists(List<string> userIds);
     }
 
     public class ChannelRepository : IChannelRepository
@@ -21,6 +22,13 @@ namespace ChatAPI.Infrastructure.Repository
         public ChannelRepository(IMongoDatabase database)
         {
             _collection = database.GetCollection<Channel>("Channel");
+        }
+
+        public async Task<Channel> Exists(List<string> userIds)
+        {
+            var result = await _collection.Find(_ => _.UsersId.All(id => userIds.Contains(id))).FirstOrDefaultAsync();
+
+            return result;
         }
 
         public async Task<Channel> Get(string channelId)

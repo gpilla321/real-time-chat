@@ -4,18 +4,13 @@ import Channels from "./components/pages/channels.tsx";
 import Chat from "./components/chat.tsx";
 import { ChannelProvider } from "./contexts/channelContext.tsx";
 import { UserProvider } from "./contexts/userContext.tsx";
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  Route,
-  RouterProvider,
-  Routes,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import CreateAccount from "./pages/CreateAccount.tsx";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "../graphql/apolloClient.ts";
 import ProtectedRoute from "./common/ProtectedRoute.tsx";
+import { UnviewedMessageProvider } from "./contexts/unviewedMessageContext.tsx";
 
 function App() {
   const routes = createBrowserRouter([
@@ -44,7 +39,9 @@ function App() {
   return (
     <ApolloProvider client={apolloClient}>
       <UserProvider>
-        <RouterProvider router={routes} />
+        <UnviewedMessageProvider>
+          <RouterProvider router={routes} />
+        </UnviewedMessageProvider>
       </UserProvider>
     </ApolloProvider>
   );

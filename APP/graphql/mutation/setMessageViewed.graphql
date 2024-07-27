@@ -1,0 +1,3 @@
+mutation SetMessageViewed($messageIds: [String!]!, $userId: String!) {
+  setMessageViewed(messageIds: $messageIds, userId: $userId) 
+}

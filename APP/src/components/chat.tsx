@@ -5,6 +5,7 @@ import {
   useMessagesQuery,
   UserMessageDto,
   useSendMessageMutation,
+  useSetMessageViewedMutation,
 } from "../../graphql/schema";
 import { useEffect } from "react";
 import { useUserContext } from "../contexts/userContext";
@@ -13,22 +14,36 @@ import { v4 } from "uuid";
 import ChatHeader from "./molecules/chat/chatHeader";
 import ChatHistory from "./molecules/chat/chatHistory";
 import ChatTextEditor from "./molecules/chat/chatTextEditor";
+import useUnviwedMessageContext from "../contexts/unviewedMessageContext";
 
 const Chat = () => {
   const [sendMessage] = useSendMessageMutation();
   const { currentUser } = useUserContext();
   const { selectedChannel, setSelectedChannel, getChannelName } =
     useChannelContext();
+  const [setMessageViewed] = useSetMessageViewedMutation();
+  const { unviewedMessages, resetUnviewedMessage } = useUnviwedMessageContext();
 
   const { data, refetch } = useMessagesQuery({
-    skip: !currentUser && !selectedChannel,
+    skip: !currentUser || !selectedChannel,
     variables: {
-      channelId: selectedChannel?.id || "",
+      channelId: selectedChannel?.id!,
     },
   });
 
   useEffect(() => {
     var chat = document.getElementById("chat-wrapper");
+
+    if (data) {
+      const unviewedMessages = data.messages.filter(
+        (_) => !_.viewedBy.includes(currentUser?.userId!)
+      );
+
+      if (unviewedMessages && unviewedMessages.length > 0) {
+        setMessageVieweds(unviewedMessages.map((_) => _.id));
+        resetUnviewedMessage(selectedChannel?.id!);
+      }
+    }
 
     if (chat) chat.scrollTo(0, chat.scrollHeight);
   }, [data]);
@@ -63,6 +78,15 @@ const Chat = () => {
   if (!selectedChannel)
     return <StyledWrapper empty>Start a Conversation</StyledWrapper>;
 
+  const setMessageVieweds = (messageIds: string[]) => {
+    setMessageViewed({
+      variables: {
+        userId: currentUser?.userId!,
+        messageIds,
+      },
+    });
+  };
+
   return (
     <StyledWrapper>
       <ChatHeader
@@ -79,12 +103,13 @@ const Chat = () => {
 };
 
 export default Chat;
-  
+
 const StyledWrapper = styled.div<{ empty?: boolean }>`
   width: 80%;
   padding: 1em;
   background-color: ${COLOR.lightGray} !important;
   height: 100vh;
+  box-sizing: border-box;
 
   ${(props) =>
     props.empty &&

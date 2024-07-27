@@ -63,5 +63,13 @@ namespace ChatAPI.GraphQL
                 Data = loggedIn
             };
         }
+
+        [Authorize]
+        public async Task<bool> SetMessageViewed(List<string> messageIds, string userId)
+        {
+            await _messageService.SetMessageViewed(messageIds, userId);
+
+            return true;
+        }
     }
 }

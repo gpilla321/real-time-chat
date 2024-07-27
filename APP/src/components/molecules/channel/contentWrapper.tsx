@@ -1,10 +1,12 @@
 import React from "react";
 import { StyledH4 } from "../../atoms/common";
 import { COLOR } from "../../consts";
+import styled from "styled-components";
 
 interface IProps {
   children: React.ReactNode;
   title: string;
+  subtitle?: string;
 }
 
 const ContentWrapper = ({ children, title }: IProps) => {

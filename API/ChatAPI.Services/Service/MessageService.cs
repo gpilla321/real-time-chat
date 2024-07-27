@@ -10,6 +10,7 @@ namespace ChatAPI.Services.Service
     {
         Task SendMessage(SendMessageInput input);
         Task<List<UserMessageDTO>> GetMessages(string channelId);
+        Task SetMessageViewed(List<string> messageId, string userId);
     }
 
     public class MessageService : IMessageService
@@ -28,8 +29,12 @@ namespace ChatAPI.Services.Service
 
         public async Task<List<UserMessageDTO>> GetMessages(string channelId)
         {
+            var channel = await _channelService.Get(channelId);
+            if (channel == null)
+                throw new Exception("Channel not found");
+
             var messages = await _messageRepository.GetMessages(channelId);
-            var users = await _userService.List();
+            var users = await _userService.Get(channel.UsersId);
 
             var userMessages = messages.ToList().Select(_ => new UserMessageDTO()
             {
@@ -37,7 +42,8 @@ namespace ChatAPI.Services.Service
                 From = users?.Where(u => u.Id == _.From).FirstOrDefault(),
                 To = users?.Where(u => u.Id == _.To).FirstOrDefault(),
                 Timestamp = _.Timestamp,
-                Content = _.Content
+                Content = _.Content,
+                ViewedBy = _.ViewedBy
             }).ToList();
 
             return userMessages;
@@ -68,11 +74,17 @@ namespace ChatAPI.Services.Service
                 From = input.From,
                 To = input.To,
                 ClientUID = input.ClientUID,
-                ViewedBy = new List<string>()
+                ViewedBy = new List<string>() { input.From },
+
             };
 
             await _messageRepository.SendMessage(message);
             await _topicSender.SendAsync("MessageSent", message);
+        }
+
+        public async Task SetMessageViewed(List<string> messageId, string userId)
+        {
+            await _messageRepository.SetMessageViewed(messageId, userId);
         }
     }
 }

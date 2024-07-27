@@ -14,5 +14,6 @@ namespace ChatAPI.Domain.DTO
         public User To { get; set; }
         public DateTime Timestamp { get; set; }
         public string Content { get; set; }
+        public List<string> ViewedBy { get; set; }
     }
 }

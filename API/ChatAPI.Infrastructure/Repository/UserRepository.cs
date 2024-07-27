@@ -9,6 +9,7 @@ namespace ChatAPI.Infrastructure.Repository
     {
         Task<User> Insert(User input);
         Task<User> Get(string id);
+        Task<List<User>> Get(List<string> ids);
         Task<User> GetByUserName(string userName);
         Task<List<User>> List();
     }
@@ -27,6 +28,13 @@ namespace ChatAPI.Infrastructure.Repository
             var result = await _collection.FindAsync(_ => _.Id == id);
 
             return result.FirstOrDefault();
+        }
+
+        public async Task<List<User>> Get(List<string> ids)
+        {
+            var result = await _collection.FindAsync(_ => ids.Contains(_.Id));
+
+            return result.ToList();
         }
 
         public async Task<User> GetByUserName(string userName)

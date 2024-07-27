@@ -27,9 +27,9 @@ namespace ChatAPI.GraphQL
         }
 
         [Authorize]
-        public async Task<List<User>> ListUsers()
+        public async Task<List<User>> ListUsers(string currentUserId)
         {
-            return await _userService.List();
+            return await _userService.List(currentUserId);
         }
 
         [Authorize]

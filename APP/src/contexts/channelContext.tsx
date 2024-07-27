@@ -1,7 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import {
   Channel,
-  useListChannelsQuery,
   useListUsersQuery,
   User,
   useUnviewedMessagesQuery,
@@ -9,19 +8,16 @@ import {
 } from "../../graphql/schema";
 import { useUserContext } from "./userContext";
 
-// Removed children from the context props interface
 export interface ChannelContextProps {
-  channels: Channel[];
-  unviwedMessages: ViewByByChannelDto[];
   selectedChannel: Channel | null;
+  users: Partial<User>[] | undefined;
   setSelectedChannel: (channel: Channel | null) => void;
   getChannelName: (channelUsers: string[]) => string;
 }
 
 const ChannelContext = createContext<ChannelContextProps>({
-  channels: [],
-  unviwedMessages: [],
   selectedChannel: null,
+  users: [],
   setSelectedChannel: () => {},
   getChannelName: () => "",
 });
@@ -29,7 +25,12 @@ const ChannelContext = createContext<ChannelContextProps>({
 const ChannelProvider = ({ children }: { children: ReactNode }) => {
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
   const { currentUser } = useUserContext();
-  const { data: users } = useListUsersQuery();
+  const { data: users } = useListUsersQuery({
+    skip: !currentUser,
+    variables: {
+      currentUserId: currentUser?.userId!,
+    },
+  });
 
   const getChannelName = (channelUsers: string[]) => {
     if (!users || !users.listUsers || !currentUser) return "N/A";
@@ -46,25 +47,10 @@ const ChannelProvider = ({ children }: { children: ReactNode }) => {
     return "N/A";
   };
 
-  const { data: channels } = useListChannelsQuery({
-    skip: !currentUser,
-    variables: {
-      userId: currentUser?.userId!,
-    },
-  });
-
-  const { data: unviewedMessages } = useUnviewedMessagesQuery({
-    skip: !currentUser,
-    variables: {
-      userId: currentUser?.userId!,
-    },
-  });
-
   return (
     <ChannelContext.Provider
       value={{
-        channels: channels?.listChannels || [],
-        unviwedMessages: unviewedMessages?.channelViewedBy || [],
+        users: users?.listUsers,
         selectedChannel,
         setSelectedChannel,
         getChannelName,

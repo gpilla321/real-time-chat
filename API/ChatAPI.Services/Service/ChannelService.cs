@@ -44,7 +44,7 @@ namespace ChatAPI.Services.Service
 
         public Task<Channel> Get(string channelId)
         {
-            throw new NotImplementedException();
+            return _channelRepository.Get(channelId);
         }
 
         public async Task<Channel> Insert(CreateChannelInput input)

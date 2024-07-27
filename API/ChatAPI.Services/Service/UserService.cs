@@ -10,7 +10,8 @@ namespace ChatAPI.Services.Service
     {
         Task<User> Insert(CreateUserInput newUser);
         Task<User> Get(string id);
-        Task<List<User>> List();
+        Task<List<User>> Get(List<string> ids);
+        Task<List<User>> List(string currentUserId);
         Task<User> GetByUserName(string userName);
     }
 
@@ -62,17 +63,33 @@ namespace ChatAPI.Services.Service
             return insertedUser;
         }
 
-        public async Task<List<User>> List()
+        public async Task<List<User>> List(string currentUserId)
         {
             _memoryCache.TryGetValue("users", out List<User> cachedUsers);
 
             if (cachedUsers == null)
             {
                 var users = await _userRepository.List();
-                _memoryCache.Set("users", users);
+                _memoryCache.Set("users", users, TimeSpan.FromMinutes(30));
+
+                return users.Where(_ => _.Id != currentUserId).ToList();
             }
 
             return cachedUsers;
+        }
+
+        public async Task<List<User>> Get(List<string> ids)
+        {
+            _memoryCache.TryGetValue("users", out List<User> cachedUsers);
+
+            if (cachedUsers == null)
+            {
+                var users = await _userRepository.Get(ids);
+
+                return users.Where(_ => ids.Contains(_.Id)).ToList();
+
+            }
+            return cachedUsers.Where(_ => ids.Contains(_.Id)).ToList();
         }
     }
 }

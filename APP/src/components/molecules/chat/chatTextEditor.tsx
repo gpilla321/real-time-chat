@@ -1,22 +1,31 @@
 import styled from "styled-components";
 import { COLOR } from "../../consts";
 import Button from "../../atoms/button";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface IProps {
   handleSendMessage: (message: string) => void;
 }
 
 const ChartTextEditor = ({ handleSendMessage }: IProps) => {
+  const inputRef = useRef<HTMLInputElement>();
   const [text, setText] = useState<string>("");
 
   const handleTextChange = (newValue: string) => {
     setText(newValue);
   };
 
-  const onClick = (message: string) => {
+  const onSend = (message: string) => {
     handleSendMessage(message);
+    inputRef.current?.focus();
     setText("");
+  };
+
+  const onKeyDown = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      onSend(event.target.value);
+    }
   };
 
   return (
@@ -25,9 +34,10 @@ const ChartTextEditor = ({ handleSendMessage }: IProps) => {
         value={text}
         placeholder="Type the message"
         onChange={(e) => handleTextChange(e.target.value)}
+        onKeyDown={onKeyDown}
       />
       <StyledButtonArea>
-        <Button text="Send" onClick={() => onClick(text)} />
+        <Button text="Send" onClick={() => onSend(text)} />
       </StyledButtonArea>
     </StyledWrapperTextEditor>
   );

@@ -1,5 +1,6 @@
 ﻿using ChatAPI.Domain.Model;
 using MongoDB.Driver;
+using System.Linq;
 
 namespace ChatAPI.Infrastructure.Repository
 {
@@ -8,6 +9,7 @@ namespace ChatAPI.Infrastructure.Repository
         Task SendMessage(Message message);
         Task<List<Message>> GetMessages(string channelId);
         Task<List<Message>> UnviewedMessagesByChannel(List<string> channelsId, string userId);
+        Task SetMessageViewed(List<string> messageIds, string userId);
     }
 
     public class MessageRepository : IMessageRepository
@@ -31,6 +33,13 @@ namespace ChatAPI.Infrastructure.Repository
             message.Timestamp = DateTime.Now;
 
             await _collection.InsertOneAsync(message);
+        }
+
+        public async Task SetMessageViewed(List<string> messageIds, string userId)
+        {
+            var result = await _collection
+                    .UpdateManyAsync(_ => messageIds.Contains(_.Id), 
+                    Builders<Message>.Update.AddToSet(_ => _.ViewedBy, userId));
         }
 
         public async Task<List<Message>> UnviewedMessagesByChannel(List<string> channelsId, string userId)

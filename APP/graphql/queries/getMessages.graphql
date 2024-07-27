@@ -13,5 +13,6 @@ query Messages($channelId: String!) {
     }
     content
     timestamp
+    viewedBy
   }
 }

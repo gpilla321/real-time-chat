@@ -26,6 +26,7 @@ const StyledAccount = styled.div`
   width: 100%;
   height: 60px;
   border-top: 1px solid ${COLOR.white};
+  background-color: ${COLOR.primary};
 `;
 
 const StyledAccountDetail = styled.div`
