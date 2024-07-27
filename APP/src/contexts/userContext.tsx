@@ -1,13 +1,13 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 
-interface User {
+export interface LoggedUser {
   name: string;
   username: string;
   userId: string;
 }
 
 export interface UserContextProps {
-  currentUser: User | null;
+  currentUser: LoggedUser | null;
   isAuthenticated: boolean;
 }
 
@@ -17,7 +17,7 @@ const UserContext = createContext<UserContextProps>({
 });
 
 const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [currentUser] = useState<User | null>(
+  const [currentUser] = useState<LoggedUser | null>(
     localStorage.getItem("user")
       ? JSON.parse(localStorage.getItem("user")!)
       : null

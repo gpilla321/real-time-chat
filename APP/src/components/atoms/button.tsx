@@ -26,7 +26,6 @@ const Button = ({
   const navigate = useNavigate();
 
   const handleOnClick = () => {
-    console.log("onClick", onClick);
     if (redirectTo) {
       navigate(redirectTo);
     }

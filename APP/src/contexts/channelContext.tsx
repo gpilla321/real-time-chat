@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import {
   Channel,
   useListChannelsQuery,
+  useListUsersQuery,
   User,
   useUnviewedMessagesQuery,
   ViewByByChannelDto,
@@ -14,6 +15,7 @@ export interface ChannelContextProps {
   unviwedMessages: ViewByByChannelDto[];
   selectedChannel: Channel | null;
   setSelectedChannel: (channel: Channel | null) => void;
+  getChannelName: (channelUsers: string[]) => string;
 }
 
 const ChannelContext = createContext<ChannelContextProps>({
@@ -21,11 +23,29 @@ const ChannelContext = createContext<ChannelContextProps>({
   unviwedMessages: [],
   selectedChannel: null,
   setSelectedChannel: () => {},
+  getChannelName: () => "",
 });
 
 const ChannelProvider = ({ children }: { children: ReactNode }) => {
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
   const { currentUser } = useUserContext();
+  const { data: users } = useListUsersQuery();
+
+  const getChannelName = (channelUsers: string[]) => {
+    if (!users || !users.listUsers || !currentUser) return "N/A";
+    const chatWithUserId = channelUsers.find(
+      (user) => user !== currentUser?.userId
+    );
+
+    if (chatWithUserId)
+      return (
+        users.listUsers?.find((user) => user.id === chatWithUserId)?.name ||
+        "N/A"
+      );
+
+    return "N/A";
+  };
+
   const { data: channels } = useListChannelsQuery({
     skip: !currentUser,
     variables: {
@@ -47,6 +67,7 @@ const ChannelProvider = ({ children }: { children: ReactNode }) => {
         unviwedMessages: unviewedMessages?.channelViewedBy || [],
         selectedChannel,
         setSelectedChannel,
+        getChannelName,
       }}
     >
       {children}

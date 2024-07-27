@@ -1,17 +1,18 @@
 import styled from "styled-components";
 import { COLOR } from "../../consts";
-import {
-  useCreateChannelMutation,
-  useListUsersQuery,
-} from "../../../../graphql/schema";
+import { useCreateChannelMutation, User } from "../../../../graphql/schema";
 import { useUserContext } from "../../../contexts/userContext";
+import ContentWrapper from "./contentWrapper";
 
-const AvailableUsers = () => {
-  const { data } = useListUsersQuery();
+interface IProps {
+  users: Partial<User>[] | undefined;
+}
+
+const AvailableUsers = ({ users }: IProps) => {
   const { currentUser } = useUserContext();
   const [createChannel] = useCreateChannelMutation();
 
-  console.log(data);
+  // console.log(data);
 
   const onClick = (toUserId: string) => {
     createChannel({
@@ -24,14 +25,18 @@ const AvailableUsers = () => {
     });
   };
 
-  if (!data) return null;
+  if (!users) return null;
 
   return (
-    <StyledConversationListWrapper>
-      {data?.listUsers?.map((_, index) => (
-        <StyledConversation key={index} onClick={() => onClick(_.id)}>{_.name}</StyledConversation>
-      ))}
-    </StyledConversationListWrapper>
+    <ContentWrapper title="Users">
+      <StyledConversationListWrapper>
+        {users?.map((_, index) => (
+          <StyledConversation key={index} onClick={() => onClick(_.id!)}>
+            {_.name}
+          </StyledConversation>
+        ))}
+      </StyledConversationListWrapper>
+    </ContentWrapper>
   );
 };
 

@@ -31,6 +31,7 @@ const StyledConversation = styled.div`
   padding: 0.5em 0.5em;
   cursor: pointer;
   border-radius: 0.25em;
+  display: flex;
 
   &:hover {
     background-color: ${COLOR.white};

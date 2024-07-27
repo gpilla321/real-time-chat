@@ -38,7 +38,6 @@ namespace ChatAPI.Services.Service
                 To = users?.Where(u => u.Id == _.To).FirstOrDefault(),
                 Timestamp = _.Timestamp,
                 Content = _.Content
-
             }).ToList();
 
             return userMessages;

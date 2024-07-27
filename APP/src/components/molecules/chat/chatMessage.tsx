@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { COLOR } from "./consts";
 import moment from "moment";
+import { COLOR } from "../../consts";
 
 interface IProps {
   side: "left" | "right";
@@ -10,7 +10,7 @@ interface IProps {
   confirming: boolean;
 }
 
-const Message = ({ side, sender, content, sentAt, confirming }: IProps) => {
+const ChatMessage = ({ side, sender, content, sentAt, confirming }: IProps) => {
   return (
     <StyledWrapper side={side}>
       <StyledMessage>
@@ -27,7 +27,7 @@ const Message = ({ side, sender, content, sentAt, confirming }: IProps) => {
   );
 };
 
-export { Message };
+export { ChatMessage };
 
 const StyledDate = styled.span`
   font-weight: 400;

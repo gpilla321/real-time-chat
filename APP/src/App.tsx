@@ -1,6 +1,6 @@
 import "./App.css";
 import styled from "styled-components";
-import Channels from "./components/channels.tsx";
+import Channels from "./components/pages/channels.tsx";
 import Chat from "./components/chat.tsx";
 import { ChannelProvider } from "./contexts/channelContext.tsx";
 import { UserProvider } from "./contexts/userContext.tsx";

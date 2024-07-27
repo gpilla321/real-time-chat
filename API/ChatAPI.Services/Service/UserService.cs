@@ -52,7 +52,14 @@ namespace ChatAPI.Services.Service
                 Salt = hash.Item1
             };
 
-            return await _userRepository.Insert(user);
+            var insertedUser = await _userRepository.Insert(user);
+
+            if (!string.IsNullOrEmpty(insertedUser.Id))
+            {
+                _memoryCache.Remove("users");
+            }
+
+            return insertedUser;
         }
 
         public async Task<List<User>> List()

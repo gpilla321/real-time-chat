@@ -1,30 +1,34 @@
 import styled from "styled-components";
 import { useChannelContext } from "../../../contexts/channelContext";
-import { useUserContext } from "../../../contexts/userContext";
 import ChannelName from "./channelName";
-import { Channel } from "../../../../graphql/schema";
+import { Channel, User } from "../../../../graphql/schema";
+import ContentWrapper from "./contentWrapper";
 
-const AvailableChannels = () => {
-  const { channels, setSelectedChannel } = useChannelContext();
-  const { currentUser } = useUserContext();
+interface IProps {
+  
+}
+const AvailableChannels = ({  }: IProps) => {
+  const { channels, setSelectedChannel, getChannelName } = useChannelContext();
 
   const onClick = (channel: Channel) => {
     setSelectedChannel(channel);
   };
 
   return (
-    <StyledConversationListWrapper>
-      {channels &&
-        channels.map((c, index) => (
-          <ChannelName
-            key={index}
-            unviewedMessageCount={"10"}
-            onClick={() => onClick(c)}
-          >
-            test
-          </ChannelName>
-        ))}
-    </StyledConversationListWrapper>
+    <ContentWrapper title="Channels">
+      <StyledConversationListWrapper>
+        {channels &&
+          channels.map((channel, index) => (
+            <ChannelName
+              key={index}
+              unviewedMessageCount={"10"}
+              onClick={() => onClick(channel)}
+            >
+              {getChannelName(channel.usersId)}
+            </ChannelName>
+          ))}
+      </StyledConversationListWrapper>
+    </ContentWrapper>
   );
 };
 

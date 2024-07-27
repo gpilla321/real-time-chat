@@ -12,4 +12,8 @@ export default Badge;
 const StyledBadge = styled.div`
   background-color: ${COLOR.secondary};
   color: ${COLOR.white};
+  border-radius: 100%;
+  padding: 0.25em .5em;
+  font-size: 0.75em;
+  margin-left: 0.5em;
 `;

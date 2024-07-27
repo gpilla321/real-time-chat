@@ -47,15 +47,20 @@ namespace ChatAPI.Services.Service
             throw new NotImplementedException();
         }
 
-        public Task<Channel> Insert(CreateChannelInput input)
+        public async Task<Channel> Insert(CreateChannelInput input)
         {
+            var channelExists = await _channelRepository.Exists(new List<string>() { input.From, input.To });
+
+            if (channelExists != null)
+                throw new Exception("Channel already exists");
+
             var channel = new Channel()
             {
                 UsersId = new List<string>() { input.From, input.To },
                 CreatedAt = DateTime.Now
             };
 
-            return _channelRepository.Insert(channel);
+            return await _channelRepository.Insert(channel);
         }
 
         public Task<List<Channel>> List(string userId)
