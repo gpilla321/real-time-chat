@@ -1,0 +1,9 @@
+mutation CreateChannel($input: CreateChannelInput!) {
+  createChannel(input: $input) {
+    success
+    data {
+      usersId
+      id
+    }
+  }
+}

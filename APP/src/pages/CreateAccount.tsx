@@ -1,12 +1,11 @@
 import { useForm } from "react-hook-form";
-import { StyledH3 } from "../components/common";
-import TextInput from "../components/form/textInput";
-import Button from "../components/button";
+import { StyledH3 } from "../components/atoms/common";
+import Button from "../components/atoms/button";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import { COLOR } from "../components/consts";
-import DefaultLink from "../components/link";
+import { useNavigate } from "react-router-dom";
+import DefaultLink from "../components/atoms/link";
 import { useCreateUserMutation } from "../../graphql/schema";
+import TextInput from "../components/atoms/form/textInput";
 
 type CreateAccount = {
   username: string;
@@ -21,7 +20,7 @@ const CreateAccount = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<CreateAccount>();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   console.log(errors);
 

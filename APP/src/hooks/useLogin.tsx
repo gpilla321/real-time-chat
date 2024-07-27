@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { useLoginMutation } from "../../graphql/schema";
-import { useNavigate } from "react-router-dom";
 
 interface Login {
-  userName: string;
+  username: string;
   password: string;
 }
 
 const useLogin = () => {
   const [loginMutation] = useLoginMutation();
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState<boolean>(false);
 
   const login = (data: Login) => {
     loginMutation({
@@ -21,14 +20,13 @@ const useLogin = () => {
       },
     })
       .then((res) => {
-        console.log("res =>", res);
         if (!res.data || !res.data.login) return;
 
         const { data } = res.data.login;
 
         if (data) {
-          storeToken(data.token, data.userName);
-          navigate("/workspace");
+          storeToken(data.token, data.username, data.name, data.userId);
+          setSuccess(true);
         }
       })
       .catch(() => {
@@ -36,12 +34,17 @@ const useLogin = () => {
       });
   };
 
-  const storeToken = (jwt: string, userName: string) => {
+  const storeToken = (
+    jwt: string,
+    userName: string,
+    name: string,
+    userId: string
+  ) => {
     localStorage.setItem("jwt", jwt);
-    localStorage.setItem("userName", userName);
+    localStorage.setItem("user", JSON.stringify({ userName, name, userId }));
   };
 
-  return { login, error };
+  return { login, success, error };
 };
 
 export default useLogin;

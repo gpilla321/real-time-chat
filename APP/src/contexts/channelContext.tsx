@@ -6,6 +6,7 @@ import {
   useUnviewedMessagesQuery,
   ViewByByChannelDto,
 } from "../../graphql/schema";
+import { useUserContext } from "./userContext";
 
 // Removed children from the context props interface
 export interface ChannelContextProps {
@@ -24,20 +25,18 @@ const ChannelContext = createContext<ChannelContextProps>({
 
 const ChannelProvider = ({ children }: { children: ReactNode }) => {
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
-  const [currentUser] = useState<User | null>(
-    JSON.parse(localStorage.getItem("user") || "{}") ?? null
-  );
+  const { currentUser } = useUserContext();
   const { data: channels } = useListChannelsQuery({
     skip: !currentUser,
     variables: {
-      userId: currentUser?.id!,
+      userId: currentUser?.userId!,
     },
   });
 
   const { data: unviewedMessages } = useUnviewedMessagesQuery({
     skip: !currentUser,
     variables: {
-      userId: currentUser?.id!,
+      userId: currentUser?.userId!,
     },
   });
 

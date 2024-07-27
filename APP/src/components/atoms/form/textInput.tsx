@@ -1,6 +1,6 @@
-import { Field, FieldError, UseFormRegisterReturn } from "react-hook-form";
+import { UseFormRegisterReturn } from "react-hook-form";
 import styled from "styled-components";
-import { COLOR } from "../consts";
+import { COLOR } from "../../consts";
 
 interface HasError {
   hasError: boolean;

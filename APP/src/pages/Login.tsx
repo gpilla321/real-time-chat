@@ -1,29 +1,35 @@
 import { useForm } from "react-hook-form";
-import { StyledH3 } from "../components/common";
-import TextInput from "../components/form/textInput";
-import Button from "../components/button";
+import { StyledH3 } from "../components/atoms/common";
+import Button from "../components/atoms/button";
 import styled from "styled-components";
-import { useLoginMutation } from "../../graphql/schema";
 import useLogin from "../hooks/useLogin";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import TextInput from "../components/atoms/form/textInput";
 
 type Login = {
-  userName: string;
+  username: string;
   password: string;
 };
 
 const Login = () => {
-  const { login, error } = useLogin();
+  const { login, success } = useLogin();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Login>();
-
-  console.log(errors);
+  const navigate = useNavigate();
 
   const onSubmit = (data: Login) => {
     login(data);
   };
+
+  useEffect(() => {
+    if (success) {
+      navigate("/workspace");
+    }
+  }, [success]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -33,13 +39,13 @@ const Login = () => {
             Login
           </StyledH3>
           <TextInput
-            register={register("userName", {
+            register={register("username", {
               required: "You must fill the username",
             })}
             label="Username"
             error={{
-              hasError: !!errors.userName,
-              message: errors.userName?.message,
+              hasError: !!errors.username,
+              message: errors.username?.message,
             }}
           />
           <TextInput

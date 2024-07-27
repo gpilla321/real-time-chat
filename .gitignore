@@ -1,0 +1,26 @@
+# Ignore files for .NET API
+API/bin/
+API/obj/
+API/*.user
+API/*.rsuser
+API/*.suo
+API/*.userosscache
+API/*.sln.docstates
+API/.vs/
+API/.vscode/
+
+# Ignore files for Node.js and React app
+APP/node_modules/
+APP/build/
+APP/.env
+APP/.DS_Store
+APP/npm-debug.log*
+APP/yarn-debug.log*
+APP/yarn-error.log*
+
+# Ignore logs
+*.log
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db

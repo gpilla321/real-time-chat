@@ -15,8 +15,15 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Byte: { input: any; output: any; }
   DateTime: { input: any; output: any; }
 };
+
+export enum ApplyPolicy {
+  AfterResolver = 'AFTER_RESOLVER',
+  BeforeResolver = 'BEFORE_RESOLVER',
+  Validation = 'VALIDATION'
+}
 
 export type Channel = {
   __typename?: 'Channel';
@@ -39,13 +46,15 @@ export type CreateUserInput = {
 
 export type LoggedInDto = {
   __typename?: 'LoggedInDTO';
+  name: Scalars['String']['output'];
   token: Scalars['String']['output'];
-  userName: Scalars['String']['output'];
+  userId: Scalars['String']['output'];
+  username: Scalars['String']['output'];
 };
 
 export type LoginDtoInput = {
   password: Scalars['String']['input'];
-  userName: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type Message = {
@@ -62,7 +71,7 @@ export type Message = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createChannel: Channel;
+  createChannel: OperationResultDtoOfChannel;
   createUser: OperationResultDtoOfBoolean;
   login: OperationResultDtoOfLoggedInDto;
   sendMessage: Scalars['Boolean']['output'];
@@ -91,6 +100,13 @@ export type MutationSendMessageArgs = {
 export type OperationResultDtoOfBoolean = {
   __typename?: 'OperationResultDTOOfBoolean';
   data: Scalars['Boolean']['output'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
+export type OperationResultDtoOfChannel = {
+  __typename?: 'OperationResultDTOOfChannel';
+  data?: Maybe<Channel>;
   message?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
 };
@@ -163,6 +179,7 @@ export type User = {
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
   password: Scalars['String']['output'];
+  salt: Array<Scalars['Byte']['output']>;
   username: Scalars['String']['output'];
 };
 
@@ -181,6 +198,13 @@ export type ViewByByChannelDto = {
   count: Scalars['Int']['output'];
 };
 
+export type CreateChannelMutationVariables = Exact<{
+  input: CreateChannelInput;
+}>;
+
+
+export type CreateChannelMutation = { __typename?: 'Mutation', createChannel: { __typename?: 'OperationResultDTOOfChannel', success: boolean, data?: { __typename?: 'Channel', usersId: Array<string>, id: string } | null } };
+
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
@@ -193,7 +217,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'OperationResultDTOOfLoggedInDTO', success: boolean, data?: { __typename?: 'LoggedInDTO', token: string, userName: string } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'OperationResultDTOOfLoggedInDTO', success: boolean, data?: { __typename?: 'LoggedInDTO', token: string, username: string, name: string, userId: string } | null } };
 
 export type SendMessageMutationVariables = Exact<{
   input: SendMessageInput;
@@ -234,6 +258,43 @@ export type MessageSentSubscriptionVariables = Exact<{ [key: string]: never; }>;
 export type MessageSentSubscription = { __typename?: 'Subscription', messageSent: { __typename?: 'Message', id: string, from: string, to: string, content: string, timestamp: any } };
 
 
+export const CreateChannelDocument = gql`
+    mutation CreateChannel($input: CreateChannelInput!) {
+  createChannel(input: $input) {
+    success
+    data {
+      usersId
+      id
+    }
+  }
+}
+    `;
+export type CreateChannelMutationFn = Apollo.MutationFunction<CreateChannelMutation, CreateChannelMutationVariables>;
+
+/**
+ * __useCreateChannelMutation__
+ *
+ * To run a mutation, you first call `useCreateChannelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateChannelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createChannelMutation, { data, loading, error }] = useCreateChannelMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateChannelMutation(baseOptions?: Apollo.MutationHookOptions<CreateChannelMutation, CreateChannelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateChannelMutation, CreateChannelMutationVariables>(CreateChannelDocument, options);
+      }
+export type CreateChannelMutationHookResult = ReturnType<typeof useCreateChannelMutation>;
+export type CreateChannelMutationResult = Apollo.MutationResult<CreateChannelMutation>;
+export type CreateChannelMutationOptions = Apollo.BaseMutationOptions<CreateChannelMutation, CreateChannelMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
@@ -273,7 +334,9 @@ export const LoginDocument = gql`
     success
     data {
       token
-      userName
+      username
+      name
+      userId
     }
   }
 }

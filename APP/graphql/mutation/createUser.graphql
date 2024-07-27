@@ -1,5 +1,5 @@
 mutation CreateUser($input: CreateUserInput!) {
-    createUser(input: $input) {
-        success
-    }
+  createUser(input: $input) {
+    success
+  }
 }

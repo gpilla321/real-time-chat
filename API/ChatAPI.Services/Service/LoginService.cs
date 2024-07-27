@@ -24,7 +24,7 @@ namespace ChatAPI.Services.Service
 
         public async Task<LoggedInDTO> Login(LoginDTO login)
         {
-            var user = await _userService.GetByUserName(login.UserName);
+            var user = await _userService.GetByUserName(login.Username);
 
             if (user == null)
                 throw new Exception("User not found");
@@ -34,12 +34,14 @@ namespace ChatAPI.Services.Service
             if (user.Password != hashedPassword.Item2)
                 throw new Exception("Invalid password");
 
-            var jwt = Auth.GenerateJwt(login.UserName);
+            var jwt = Auth.GenerateJwt(login.Username);
 
             return new LoggedInDTO()
             {
                 Token = jwt,
-                UserName = login.UserName
+                Username = user.Username,
+                Name = user.Name,
+                UserId = user.Id
             };
         }
     }

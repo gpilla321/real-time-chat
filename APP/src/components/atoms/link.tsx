@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { COLOR } from "./consts";
+import { COLOR } from "../consts";
 import { Link } from "react-router-dom";
 
 interface Props {

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { COLOR } from "./consts";
-import { StyledH1 } from "./common";
-import Button from "./button";
+import { StyledH1 } from "./atoms/common";
+import Button from "./atoms/button";
 import {
   useMessageSentSubscription,
   useMessagesQuery,

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { COLOR } from "./consts";
+import { COLOR } from "../consts";
 import { useNavigate } from "react-router-dom";
 
 interface IProps {
@@ -21,17 +21,21 @@ const Button = ({
   color,
   margin,
   redirectTo,
+  onClick,
 }: IProps) => {
   const navigate = useNavigate();
 
-  const onClick = () => {
+  const handleOnClick = () => {
+    console.log("onClick", onClick);
     if (redirectTo) {
       navigate(redirectTo);
     }
+
+    onClick && onClick();
   };
   return (
     <StyledButton
-      onClick={onClick}
+      onClick={handleOnClick}
       type={isSubmit ? "submit" : ""}
       fullWidth={fullWidth}
       color={color}

@@ -42,9 +42,15 @@ namespace ChatAPI.GraphQL
         }
 
         [Authorize]
-        public async Task<Channel> CreateChannel(CreateChannelInput input)
+        public async Task<OperationResultDTO<Channel>> CreateChannel(CreateChannelInput input)
         {
-            return await _channelService.Insert(input);
+            var channel = await _channelService.Insert(input);
+
+            return new OperationResultDTO<Channel>()
+            {
+                Success = channel != null,
+                Data = channel
+            };
         }
 
         public async Task<OperationResultDTO<LoggedInDTO>> Login(LoginDTO input)

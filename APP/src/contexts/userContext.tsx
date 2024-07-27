@@ -1,25 +1,37 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { Channel, useListUsersQuery, User } from "../../graphql/schema";
 
-// Removed children from the context props interface
+interface User {
+  name: string;
+  username: string;
+  userId: string;
+}
+
 export interface UserContextProps {
-  users: User[];
   currentUser: User | null;
+  isAuthenticated: boolean;
 }
 
 const UserContext = createContext<UserContextProps>({
-  users: [],
   currentUser: null,
+  isAuthenticated: false,
 });
 
 const UserProvider = ({ children }: { children: ReactNode }) => {
-  const { data } = useListUsersQuery();
   const [currentUser] = useState<User | null>(
-    JSON.parse(localStorage.getItem("user") || "{}") ?? null
+    localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user")!)
+      : null
   );
 
+  const isAuthenticated = currentUser != null;
+
   return (
-    <UserContext.Provider value={{ users: data?.listUsers || [], currentUser }}>
+    <UserContext.Provider
+      value={{
+        currentUser,
+        isAuthenticated,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

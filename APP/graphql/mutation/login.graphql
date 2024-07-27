@@ -1,9 +1,11 @@
 mutation Login($input: LoginDTOInput!) {
-    login(input: $input) {
-        success
-        data {
-            token
-            userName
-        }
+  login(input: $input) {
+    success
+    data {
+      token
+      username
+      name
+      userId
     }
+  }
 }
