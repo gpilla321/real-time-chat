@@ -1,7 +1,6 @@
 import React from "react";
 import { StyledH4 } from "../../atoms/common";
 import { COLOR } from "../../consts";
-import styled from "styled-components";
 
 interface IProps {
   children: React.ReactNode;
@@ -12,7 +11,7 @@ interface IProps {
 const ContentWrapper = ({ children, title }: IProps) => {
   return (
     <>
-      <StyledH4 color={COLOR.white}>{title}</StyledH4>
+      <StyledH4 color={COLOR.white} marginBottom="0.5em">{title}</StyledH4>
       {children}
     </>
   );

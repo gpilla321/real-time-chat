@@ -28,4 +28,5 @@ export default Channels;
 const StyledContent = styled.div`
   height: 80vh;
   overflow: auto;
+  padding-right: 1em;
 `

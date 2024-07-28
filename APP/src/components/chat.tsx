@@ -14,46 +14,14 @@ import { v4 } from "uuid";
 import ChatHeader from "./molecules/chat/chatHeader";
 import ChatHistory from "./molecules/chat/chatHistory";
 import ChatTextEditor from "./molecules/chat/chatTextEditor";
-import useUnviwedMessageContext from "../contexts/unviewedMessageContext";
+import useMessage from "../hooks/useMessage";
 
 const Chat = () => {
   const [sendMessage] = useSendMessageMutation();
   const { currentUser } = useUserContext();
   const { selectedChannel, setSelectedChannel, getChannelName } =
     useChannelContext();
-  const [setMessageViewed] = useSetMessageViewedMutation();
-  const { unviewedMessages, resetUnviewedMessage } = useUnviwedMessageContext();
-
-  const { data, refetch } = useMessagesQuery({
-    skip: !currentUser || !selectedChannel,
-    variables: {
-      channelId: selectedChannel?.id!,
-    },
-  });
-
-  useEffect(() => {
-    var chat = document.getElementById("chat-wrapper");
-
-    if (data) {
-      const unviewedMessages = data.messages.filter(
-        (_) => !_.viewedBy.includes(currentUser?.userId!)
-      );
-
-      if (unviewedMessages && unviewedMessages.length > 0) {
-        setMessageVieweds(unviewedMessages.map((_) => _.id));
-        resetUnviewedMessage(selectedChannel?.id!);
-      }
-    }
-
-    if (chat) chat.scrollTo(0, chat.scrollHeight);
-  }, [data]);
-
-  useMessageSentSubscription({
-    onData: (result) => {
-      if (!result || !result.data) return;
-      refetch();
-    },
-  });
+  const { messages } = useMessage(selectedChannel?.id);
 
   const handleSendMessage = (message: string) => {
     if (!message) return;
@@ -78,15 +46,6 @@ const Chat = () => {
   if (!selectedChannel)
     return <StyledWrapper empty>Start a Conversation</StyledWrapper>;
 
-  const setMessageVieweds = (messageIds: string[]) => {
-    setMessageViewed({
-      variables: {
-        userId: currentUser?.userId!,
-        messageIds,
-      },
-    });
-  };
-
   return (
     <StyledWrapper>
       <ChatHeader
@@ -94,7 +53,7 @@ const Chat = () => {
         onClose={() => setSelectedChannel(null)}
       />
       <ChatHistory
-        messages={data?.messages as UserMessageDto[]}
+        messages={messages as UserMessageDto[]}
         currentUser={currentUser}
       />
       <ChatTextEditor handleSendMessage={handleSendMessage} />

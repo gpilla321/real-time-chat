@@ -1,5 +1,5 @@
-subscription MessageSent {
-  messageSent {
+subscription MessageSent($channelId: String!) {
+  messageSent(channelId: $channelId) {
     id
     from 
     to 

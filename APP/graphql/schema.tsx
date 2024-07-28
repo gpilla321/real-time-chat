@@ -104,6 +104,13 @@ export type MutationSetMessageViewedArgs = {
   userId: Scalars['String']['input'];
 };
 
+export type NewMessageDto = {
+  __typename?: 'NewMessageDTO';
+  channelId: Scalars['String']['output'];
+  from: Scalars['String']['output'];
+  message: Scalars['String']['output'];
+};
+
 export type OperationResultDtoOfBoolean = {
   __typename?: 'OperationResultDTOOfBoolean';
   data: Scalars['Boolean']['output'];
@@ -183,6 +190,17 @@ export type SendMessageInput = {
 export type Subscription = {
   __typename?: 'Subscription';
   messageSent: Message;
+  newMessage: NewMessageDto;
+};
+
+
+export type SubscriptionMessageSentArgs = {
+  channelId: Scalars['String']['input'];
+};
+
+
+export type SubscriptionNewMessageArgs = {
+  userId: Scalars['String']['input'];
 };
 
 export type User = {
@@ -275,10 +293,19 @@ export type UnviewedMessagesQueryVariables = Exact<{
 
 export type UnviewedMessagesQuery = { __typename?: 'Query', channelViewedBy: Array<{ __typename?: 'ViewByByChannelDTO', channelId: string, count: number }> };
 
-export type MessageSentSubscriptionVariables = Exact<{ [key: string]: never; }>;
+export type MessageSentSubscriptionVariables = Exact<{
+  channelId: Scalars['String']['input'];
+}>;
 
 
 export type MessageSentSubscription = { __typename?: 'Subscription', messageSent: { __typename?: 'Message', id: string, from: string, to: string, content: string, timestamp: any } };
+
+export type NewMessageSubscriptionVariables = Exact<{
+  userId: Scalars['String']['input'];
+}>;
+
+
+export type NewMessageSubscription = { __typename?: 'Subscription', newMessage: { __typename?: 'NewMessageDTO', channelId: string, message: string, from: string } };
 
 
 export const CreateChannelDocument = gql`
@@ -632,8 +659,8 @@ export type UnviewedMessagesLazyQueryHookResult = ReturnType<typeof useUnviewedM
 export type UnviewedMessagesSuspenseQueryHookResult = ReturnType<typeof useUnviewedMessagesSuspenseQuery>;
 export type UnviewedMessagesQueryResult = Apollo.QueryResult<UnviewedMessagesQuery, UnviewedMessagesQueryVariables>;
 export const MessageSentDocument = gql`
-    subscription MessageSent {
-  messageSent {
+    subscription MessageSent($channelId: String!) {
+  messageSent(channelId: $channelId) {
     id
     from
     to
@@ -655,12 +682,45 @@ export const MessageSentDocument = gql`
  * @example
  * const { data, loading, error } = useMessageSentSubscription({
  *   variables: {
+ *      channelId: // value for 'channelId'
  *   },
  * });
  */
-export function useMessageSentSubscription(baseOptions?: Apollo.SubscriptionHookOptions<MessageSentSubscription, MessageSentSubscriptionVariables>) {
+export function useMessageSentSubscription(baseOptions: Apollo.SubscriptionHookOptions<MessageSentSubscription, MessageSentSubscriptionVariables> & ({ variables: MessageSentSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useSubscription<MessageSentSubscription, MessageSentSubscriptionVariables>(MessageSentDocument, options);
       }
 export type MessageSentSubscriptionHookResult = ReturnType<typeof useMessageSentSubscription>;
 export type MessageSentSubscriptionResult = Apollo.SubscriptionResult<MessageSentSubscription>;
+export const NewMessageDocument = gql`
+    subscription NewMessage($userId: String!) {
+  newMessage(userId: $userId) {
+    channelId
+    message
+    from
+  }
+}
+    `;
+
+/**
+ * __useNewMessageSubscription__
+ *
+ * To run a query within a React component, call `useNewMessageSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewMessageSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewMessageSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewMessageSubscription, NewMessageSubscriptionVariables> & ({ variables: NewMessageSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewMessageSubscription, NewMessageSubscriptionVariables>(NewMessageDocument, options);
+      }
+export type NewMessageSubscriptionHookResult = ReturnType<typeof useNewMessageSubscription>;
+export type NewMessageSubscriptionResult = Apollo.SubscriptionResult<NewMessageSubscription>;

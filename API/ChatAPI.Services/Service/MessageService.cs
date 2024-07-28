@@ -1,4 +1,5 @@
 ﻿using ChatAPI.Domain.DTO;
+using ChatAPI.Domain.DTO.Subscription;
 using ChatAPI.Domain.InputType;
 using ChatAPI.Domain.Model;
 using ChatAPI.Infrastructure.Repository;
@@ -79,7 +80,13 @@ namespace ChatAPI.Services.Service
             };
 
             await _messageRepository.SendMessage(message);
-            await _topicSender.SendAsync("MessageSent", message);
+            await _topicSender.SendAsync(input.ChannelId, message);
+            await _topicSender.SendAsync(input.To, new NewMessageDTO()
+            {
+                ChannelId = input.ChannelId,
+                Message = input.Content,
+                From = userFrom.Name
+            });
         }
 
         public async Task SetMessageViewed(List<string> messageId, string userId)

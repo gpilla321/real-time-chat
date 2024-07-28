@@ -1,0 +1,7 @@
+subscription NewMessage($userId: String!) {
+  newMessage(userId: $userId) {
+    channelId
+    message
+    from
+  }
+}

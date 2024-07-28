@@ -11,6 +11,8 @@ import { ApolloProvider } from "@apollo/client";
 import apolloClient from "../graphql/apolloClient.ts";
 import ProtectedRoute from "./common/ProtectedRoute.tsx";
 import { UnviewedMessageProvider } from "./contexts/unviewedMessageContext.tsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const routes = createBrowserRouter([
@@ -27,10 +29,12 @@ function App() {
       element: (
         <ProtectedRoute>
           <ChannelProvider>
-            <StyledWrapper>
-              <Channels />
-              <Chat />
-            </StyledWrapper>
+            <UnviewedMessageProvider>
+              <StyledWrapper>
+                <Channels />
+                <Chat />
+              </StyledWrapper>
+            </UnviewedMessageProvider>
           </ChannelProvider>
         </ProtectedRoute>
       ),
@@ -39,9 +43,12 @@ function App() {
   return (
     <ApolloProvider client={apolloClient}>
       <UserProvider>
-        <UnviewedMessageProvider>
-          <RouterProvider router={routes} />
-        </UnviewedMessageProvider>
+        <ToastContainer
+          position="top-right"
+          autoClose={8000}
+        />
+        <RouterProvider router={routes} />
+        <ToastContainer />
       </UserProvider>
     </ApolloProvider>
   );
