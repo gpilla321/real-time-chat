@@ -2,7 +2,10 @@
 The project aims to develop a full-stack application using .NET and React with TypeScript. MongoDB is the choosen database. The key functionalities include
 - Create an account
 - Login
-- Access the Workspace. The workspace is the place where the user chat with other  users. 
+- Access the Workspace. The workspace is the place where the user chat with other users.
+- Send messages
+- Real-time messages
+- Notifications 
 
 **Disclaimer** 
 
