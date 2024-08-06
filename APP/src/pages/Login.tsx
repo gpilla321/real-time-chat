@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form";
-import { StyledH3 } from "../components/atoms/common";
-import Button from "../components/atoms/button";
+import { StyledH3 } from "../components/atoms/Common";
+import Button from "../components/atoms/Button";
 import styled from "styled-components";
 import useLogin from "../hooks/useLogin";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import TextInput from "../components/atoms/form/textInput";
+import TextInput from "../components/atoms/form/TextInput";
 
 type Login = {
   username: string;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { COLOR } from "../../consts";
-import Badge from "../../atoms/badge";
+import Badge from "../../atoms/Badge";
 
 interface IProps {
   children: string;

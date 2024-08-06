@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useUserContext } from "../../../contexts/userContext";
 import useLogout from "../../../hooks/useLogout";
-import Button from "../../atoms/button";
+import Button from "../../atoms/Button";
 import { COLOR } from "../../consts";
 
 const AccountInfo = () => {

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { COLOR } from "../../consts";
 import { useCreateChannelMutation, User } from "../../../../graphql/schema";
 import { useUserContext } from "../../../contexts/userContext";
-import ContentWrapper from "./contentWrapper";
+import ContentWrapper from "./ContentWrapper";
 
 interface IProps {
   users: Partial<User>[] | undefined;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { COLOR } from "../../consts";
 import { User, UserMessageDto } from "../../../../graphql/schema";
-import { ChatMessage } from "./chatMessage";
+import { ChatMessage } from "./ChatMessage";
 import { LoggedUser } from "../../../contexts/userContext";
 
 interface IProps {

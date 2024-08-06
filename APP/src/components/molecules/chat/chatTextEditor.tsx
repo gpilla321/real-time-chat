@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { COLOR } from "../../consts";
-import Button from "../../atoms/button";
+import Button from "../../atoms/Button";
 import { useRef, useState } from "react";
 
 interface IProps {

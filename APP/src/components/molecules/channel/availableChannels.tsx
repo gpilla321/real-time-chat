@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useChannelContext } from "../../../contexts/channelContext";
-import ChannelName from "./channelName";
+import ChannelName from "./ChannelName";
 import { Channel, useListChannelsQuery } from "../../../../graphql/schema";
-import ContentWrapper from "./contentWrapper";
+import ContentWrapper from "./ContentWrapper";
 import { useUserContext } from "../../../contexts/userContext";
 import useUnviwedMessageContext from "../../../contexts/unviewedMessageContext";
 

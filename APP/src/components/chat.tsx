@@ -11,9 +11,9 @@ import { useEffect } from "react";
 import { useUserContext } from "../contexts/userContext";
 import { useChannelContext } from "../contexts/channelContext";
 import { v4 } from "uuid";
-import ChatHeader from "./molecules/chat/chatHeader";
-import ChatHistory from "./molecules/chat/chatHistory";
-import ChatTextEditor from "./molecules/chat/chatTextEditor";
+import ChatHeader from "./molecules/chat/ChatHeader";
+import ChatHistory from "./molecules/chat/ChatHistory";
+import ChatTextEditor from "./molecules/chat/ChatTextEditor";
 import useMessage from "../hooks/useMessage";
 
 const Chat = () => {

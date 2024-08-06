@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form";
-import { StyledH3 } from "../components/atoms/common";
-import Button from "../components/atoms/button";
+import { StyledH3 } from "../components/atoms/Common";
+import Button from "../components/atoms/Button";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import DefaultLink from "../components/atoms/link";
+import DefaultLink from "../components/atoms/Link";
 import { useCreateUserMutation } from "../../graphql/schema";
-import TextInput from "../components/atoms/form/textInput";
+import TextInput from "../components/atoms/form/TextInput";
 
 type CreateAccount = {
   username: string;

@@ -8,6 +8,7 @@ const useLogout = () => {
     localStorage.removeItem("user");
     navigate("/");
   };
+  
   return { logout };
 };
 
