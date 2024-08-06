@@ -1,7 +1,7 @@
 import "./App.css";
 import styled from "styled-components";
 import Channels from "./components/pages/Channels.tsx";
-import Chat from "./components/Chat.tsx";
+import Chat from "./components/pages/Chat.tsx";
 import { ChannelProvider } from "./contexts/channelContext.tsx";
 import { UserProvider } from "./contexts/userContext.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
