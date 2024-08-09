@@ -9,7 +9,7 @@ The project aims to develop a full-stack application using .NET and React with T
 
 **Disclaimer** 
 
-This project is under construction and a few "standard business rules" will not be in place. Also, there are planned features that are not implemented yet. Unit tests will be available soon
+This project is under construction and a few "standard business rules" will not be in place yet. Also, there are planned features that are not implemented yet. Unit tests will be available soon
 
 ## Goal
 Explore the benefits of [Atomic Design](https://atomicdesign.bradfrost.com/) on creating reusable client side components. Also, I wanted to explore [HotChocolate](https://chillicream.com/docs/hotchocolate/v13),
