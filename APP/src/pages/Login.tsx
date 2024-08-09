@@ -25,6 +25,10 @@ const Login = () => {
     login(data);
   };
 
+  const onClickCreateAccount = () => {
+    navigate("/create-account");
+  };
+
   useEffect(() => {
     if (success) {
       navigate("/workspace");
@@ -43,20 +47,14 @@ const Login = () => {
               required: "You must fill the username",
             })}
             label="Username"
-            error={{
-              hasError: !!errors.username,
-              message: errors.username?.message,
-            }}
+            error={!!errors.username}
           />
           <TextInput
             register={register("password", {
               required: "You must fill the password",
             })}
             label="Password"
-            error={{
-              hasError: !!errors.password,
-              message: errors.password?.message,
-            }}
+            error={!!errors.password}
             isPassword
           />
           <Button text="Login" margin="0 0 1em 0" isSubmit fullWidth />
@@ -64,7 +62,7 @@ const Login = () => {
             text="Create Account"
             color={"white"}
             fullWidth
-            redirectTo="/create-account"
+            onClick={onClickCreateAccount}
           />
         </StyledWrapper>
       </StyledFullHeight>

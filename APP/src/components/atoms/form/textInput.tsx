@@ -1,18 +1,14 @@
 import { UseFormRegisterReturn } from "react-hook-form";
 import styled from "styled-components";
 import { COLOR } from "../../consts";
-
-interface HasError {
-  hasError: boolean;
-  message: string | undefined;
-}
+import { v4 } from "uuid";
 
 interface IProps {
   label?: string;
   placeholder?: string;
-  register: UseFormRegisterReturn<string>;
+  register?: UseFormRegisterReturn<string>;
   isPassword?: boolean;
-  error: HasError;
+  error?: boolean;
 }
 
 const TextInput = ({
@@ -22,13 +18,15 @@ const TextInput = ({
   isPassword,
   error,
 }: IProps) => {
+  const id = v4();
   return (
     <StyledWrapper>
-      <StyledLabel>{label}</StyledLabel>
+      <StyledLabel htmlFor={id}>{label}</StyledLabel>
       <StyledTextInput
+        id={id}
         type={isPassword ? "password" : "text"}
         placeholder={placeholder}
-        error={error?.hasError || false}
+        hasError={error || false}
         autoComplete="off"
         {...register}
       />
@@ -48,7 +46,7 @@ const StyledLabel = styled.label`
   font-size: 0.875em;
   font-weight: 500;
 `;
-const StyledTextInput = styled.input<{ error: boolean }>`
+const StyledTextInput = styled.input<{ hasError: boolean }>`
   background-color: ${COLOR.lightGray} !important;
   padding: 0.75em 0;
   outline: 0;
@@ -59,9 +57,9 @@ const StyledTextInput = styled.input<{ error: boolean }>`
   font-size: 1em;
 
   ${(props) =>
-    props.error &&
+    props.hasError &&
     `
-  border-color: red;
+  border-color: ${COLOR.red};
   `}
 
   :-internal-autofill-selected {

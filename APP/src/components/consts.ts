@@ -9,7 +9,5 @@ export const COLOR = {
   lightGray2: "#ededed",
   lightGray3: "#d0d0d0",
   darkGray: "#323232",
-  hover: {
-    primary: "#5f8cc6",
-  },
+  red: "#FF0000",
 };

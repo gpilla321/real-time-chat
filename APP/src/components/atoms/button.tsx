@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { COLOR } from "../consts";
-import { useNavigate } from "react-router-dom";
 
 interface IProps {
   text: string;
@@ -10,7 +9,6 @@ interface IProps {
   fullWidth?: boolean;
   color?: "primary" | "white";
   margin?: string;
-  redirectTo?: string;
 }
 
 const Button = ({
@@ -20,18 +18,12 @@ const Button = ({
   fullWidth,
   color,
   margin,
-  redirectTo,
   onClick,
 }: IProps) => {
-  const navigate = useNavigate();
-
   const handleOnClick = () => {
-    if (redirectTo) {
-      navigate(redirectTo);
-    }
-
     onClick && onClick();
   };
+
   return (
     <StyledButton
       onClick={handleOnClick}
@@ -51,18 +43,12 @@ export default Button;
 const primaryButton = `
   color: ${COLOR.white};
   background-color: ${COLOR.primary};
-  &:hover {
-    background-color: ${COLOR.hover.primary};
-  }
 `;
 
 const whiteButton = `
   color: ${COLOR.darkGray};
   background-color: ${COLOR.white};
   border: 1px solid ${COLOR.lightGray3};
-  &:hover {
-    background-color: ${COLOR.lightGray2};
-  }
 `;
 
 const ButtonStyles = {

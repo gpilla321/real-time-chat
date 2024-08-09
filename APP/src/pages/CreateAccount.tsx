@@ -57,30 +57,21 @@ const CreateAccount = () => {
               required: "You must fill the name",
             })}
             label="Name"
-            error={{
-              hasError: !!errors.name,
-              message: errors.name?.message,
-            }}
+            error={!!errors.name}
           />
           <TextInput
             register={register("username", {
               required: "You must fill the username",
             })}
             label="Username"
-            error={{
-              hasError: !!errors.username,
-              message: errors.username?.message,
-            }}
+            error={!!errors.username}
           />
           <TextInput
             register={register("password", {
               required: "You must fill the password",
             })}
             label="Password"
-            error={{
-              hasError: !!errors.password,
-              message: errors.password?.message,
-            }}
+            error={!!errors.password}
             isPassword
           />
           <TextInput
@@ -88,10 +79,7 @@ const CreateAccount = () => {
               required: "You must fill the password",
             })}
             label="Confirm Password"
-            error={{
-              hasError: !!errors.confirmPassword,
-              message: errors.confirmPassword?.message,
-            }}
+            error={!!errors.confirmPassword}
             isPassword
           />
           <Button text="Create account" margin="0 0 1em 0" isSubmit fullWidth />
