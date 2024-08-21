@@ -28,6 +28,9 @@ namespace ChatAPI.Services.Service
 
         public async Task<User> GetByUserName(string userName)
         {
+            if (string.IsNullOrEmpty(userName))
+                throw new Exception("Username cannot be empty");
+
             return await _userRepository.GetByUserName(userName);
         }
 

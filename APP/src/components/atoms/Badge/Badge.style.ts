@@ -1,13 +1,5 @@
 import styled from "styled-components";
-import { COLOR } from "../consts";
-
-interface IProps {
-  text: string;
-}
-
-const Badge = ({ text }: IProps) => <StyledBadge>{text}</StyledBadge>;
-
-export default Badge;
+import { COLOR } from "../../consts";
 
 const StyledBadge = styled.div`
   background-color: ${COLOR.secondary};
@@ -18,3 +10,5 @@ const StyledBadge = styled.div`
   margin-left: 0.5em;
   font-weight: 600;
 `;
+
+export { StyledBadge };

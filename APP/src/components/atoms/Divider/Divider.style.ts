@@ -1,11 +1,5 @@
 import styled from "styled-components";
-import { COLOR } from "../consts";
-
-const Divider = () => {
-  return <StyledDivider />;
-};
-
-export default Divider;
+import { COLOR } from "../../consts";
 
 const StyledDivider = styled.div`
   width: 100%;
@@ -14,3 +8,5 @@ const StyledDivider = styled.div`
   background-color: ${COLOR.white};
   margin: 1em 0;
 `;
+
+export { StyledDivider };

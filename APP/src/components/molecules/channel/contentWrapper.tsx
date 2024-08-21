@@ -1,5 +1,5 @@
 import React from "react";
-import { StyledH4 } from "../../atoms/Common";
+import { StyledH4 } from "../../atoms/Common/Common";
 import { COLOR } from "../../consts";
 
 interface IProps {

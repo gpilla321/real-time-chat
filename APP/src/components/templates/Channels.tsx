@@ -1,9 +1,9 @@
 import AsideWrapper from "../molecules/channel/AsideWrapper";
-import AccountInfo from "../molecules/channel/AccountInfo";
+import AccountInfo from "../molecules/channel/AccountInfo/AccountInfo";
 import AvailableUsers from "../molecules/channel/AvailableUsers";
 import AvailableChannels from "../molecules/channel/AvailableChannels";
 import { useChannelContext } from "../../contexts/channelContext";
-import Divider from "../atoms/Divider";
+import Divider from "../atoms/Divider/Divider";
 import styled from "styled-components";
 
 interface IProps {}

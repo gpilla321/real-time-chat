@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { StyledH1 } from "../../atoms/Common";
+import { StyledH1 } from "../../atoms/Common/Common";
 
 interface IProps {
   title: string;

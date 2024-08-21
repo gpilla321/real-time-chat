@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { COLOR } from "../../consts";
-import Button from "../../atoms/Button";
 import { useRef, useState } from "react";
+import Button from "../../atoms/Button/Button";
 
 interface IProps {
   handleSendMessage: (message: string) => void;

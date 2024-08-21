@@ -1,7 +1,5 @@
 import "./App.css";
 import styled from "styled-components";
-import Channels from "./components/pages/Channels.tsx";
-import Chat from "./components/pages/Chat.tsx";
 import { ChannelProvider } from "./contexts/channelContext.tsx";
 import { UserProvider } from "./contexts/userContext.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -13,6 +11,8 @@ import ProtectedRoute from "./common/ProtectedRoute.tsx";
 import { UnviewedMessageProvider } from "./contexts/unviewedMessageContext.tsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Channels from "./components/templates/Channels.tsx";
+import Chat from "./components/templates/Chat.tsx";
 
 function App() {
   const routes = createBrowserRouter([

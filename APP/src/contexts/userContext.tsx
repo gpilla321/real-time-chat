@@ -39,4 +39,4 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 
 const useUserContext = () => useContext(UserContext);
 
-export { UserProvider, useUserContext };
+export { UserProvider, useUserContext, UserContext };

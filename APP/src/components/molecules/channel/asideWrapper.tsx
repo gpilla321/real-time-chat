@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { StyledH3 } from "../../atoms/Common";
+import { StyledH3 } from "../../atoms/Common/Common";
 import { COLOR } from "../../consts";
 
 const AsideWrapper = ({ children }: { children: React.ReactNode }) => {
