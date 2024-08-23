@@ -3,6 +3,8 @@ using ChatAPI.Domain.InputType;
 using ChatAPI.Infrastructure.Repository;
 using Microsoft.Extensions.Caching.Memory;
 using ChatAPI.Services.Helper;
+using ChatAPI.Services.Validators.User;
+using FluentValidation;
 
 namespace ChatAPI.Services.Service
 {
@@ -41,6 +43,8 @@ namespace ChatAPI.Services.Service
 
         public async Task<User> Insert(CreateUserInput newUser)
         {
+            await new CreateUserValidator().ValidateAndThrowAsync(newUser);
+
             var userExists = await GetByUserName(newUser.Username);
 
             if (userExists != null)
