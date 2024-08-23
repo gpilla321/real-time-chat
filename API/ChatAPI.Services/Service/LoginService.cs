@@ -22,12 +22,12 @@ namespace ChatAPI.Services.Service
             var user = await _userService.GetByUserName(login.Username);
 
             if (user == null)
-                throw new Exception("User not found");
+                throw new Exception("Invalid username or password");
 
             var hashedPassword = Hasher.Hash(login.Password, user.Salt);
 
             if (user.Password != hashedPassword.Item2)
-                throw new Exception("Invalid password");
+                throw new Exception("Invalid username or password");
 
             var jwt = Auth.GenerateJwt(login.Username);
 

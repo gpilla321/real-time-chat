@@ -24,3 +24,17 @@ APP/yarn-error.log*
 # Ignore OS generated files
 .DS_Store
 Thumbs.db
+/API/ChatAPI.Domain/bin/Debug/net7.0
+/API/ChatAPI.Domain/obj/Debug/net7.0
+/API/ChatAPI.Domain/obj
+/API/ChatAPI.Infrastructure/bin/Debug/net7.0
+/API/ChatAPI.Infrastructure/obj
+/API/ChatAPI.Services/bin/Debug/net7.0
+/API/ChatAPI.Services/obj/Debug/net7.0
+/API/ChatAPI.Services/obj
+/API/ChatAPI.Test/bin/Debug/net7.0
+/API/ChatAPI.Test/obj/Debug/net7.0
+/API/ChatAPI.Test/obj
+/API/ChatAPI.Tests/bin/Debug/net7.0
+/API/ChatAPI.Tests/obj/Debug/net7.0
+/API/ChatAPI.Tests/obj

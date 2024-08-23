@@ -4,10 +4,10 @@ using ChatAPI.Test.Mocks.Services;
 using Moq;
 using NUnit.Framework;
 
-namespace ChatAPI.Tests.Services
+namespace ChatAPI.Test.Services
 {
     [TestFixture]
-    public class LoginServiceTest
+    public class LoginServiceTests
     {
         private ILoginService _loginService;
 
@@ -70,7 +70,21 @@ namespace ChatAPI.Tests.Services
 
             var exception = Assert.ThrowsAsync<Exception>(async () => await _loginService.Login(login));
 
-            Assert.That(exception.Message, Is.EqualTo("User not found"));
+            Assert.That(exception.Message, Is.EqualTo("Invalid username or password"));
+        }
+
+        [Test]
+        public async Task Login_Error_PasswordInvalid()
+        {
+            var login = new LoginDTO()
+            {
+                Username = "test",
+                Password = "wrong_password"
+            };
+
+            var exception = Assert.ThrowsAsync<Exception>(async () => await _loginService.Login(login));
+
+            Assert.That(exception.Message, Is.EqualTo("Invalid username or password"));
         }
     }
 }
